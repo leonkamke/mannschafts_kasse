@@ -1,0 +1,8 @@
+MERN-Stack
+- Database: 		MongoDB
+- Backend framework	Express
+- Frontend: 		React
+- Backend RE:	 	Node.js
+
+Installation:
+- Node.js 18.17
