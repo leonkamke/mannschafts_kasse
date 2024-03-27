@@ -8,16 +8,7 @@ import CardContent from "@mui/material/CardContent";
 import { Link, useNavigate } from 'react-router-dom';
 
 
-const navigate = useNavigate();
-
 function Root() {
-  const handleLogin = () => {
-    // Perform login logic here
-    // For simplicity, let's assume login is successful
-    // and navigate to the dashboard
-    navigate("/admin");
-  };
-
 
   return (
     <>
@@ -42,7 +33,7 @@ function Root() {
             />
             <Link to="admin">Admin</Link>
             <div style={{ marginBottom: "20px" }} />
-            <Button variant="contained" onClick={handleLogin}>Login</Button>
+            <Button variant="contained">Login</Button>
           </Stack>
         </CardContent>
       </Card>
