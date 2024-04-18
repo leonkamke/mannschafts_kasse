@@ -5,29 +5,40 @@ import { Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import { useState } from "react";
-
+import useSignIn from "react-auth-kit/hooks/useSignIn";
 
 function Root() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const signIn = useSignIn();
+  const [usernameStr, setUsername] = useState('');
+  const [passwordStr, setPassword] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const onSubmit = (e: any) => {
     e.preventDefault();
-    console.log(username);
-    console.log(password);
-    try {
-      const response = await axios.post("http://localhost:3000/login", {
-        username,
-        password,
-      });
-      const token = response.data.token;
-      // Store token in localStorage or cookies
-      console.log("Logged in successfully. Token:", token);
-    } catch (error) {
-      console.error("Login failed:", error);
-    }
+    const formData = {
+      username: usernameStr,
+      password: passwordStr
+    };
+    axios.post("http://localhost:3000/api/login", formData).then((res) => {
+      if (res.status === 200) {
+        if (
+          signIn({
+            auth: {
+              token: res.data.token,
+              type: "Bearer",
+            },
+            refresh: res.data.refreshToken,
+            userState: res.data.authUserState,
+          })
+        ) {
+          // Only if you are using refreshToken feature
+          // Redirect or do-something
+        } else {
+          //Throw error
+        }
+      }
+    });
   };
 
   return (
@@ -44,17 +55,23 @@ function Root() {
         <CardContent>
           <h1 style={{ color: "#101418" }}>Beer Calculator!</h1>
           <Stack>
-            <TextField label="Username" value={username} onChange={e => setUsername(e.target.value)}/>
+            <TextField
+              label="Username"
+              value={usernameStr}
+              onChange={(e) => setUsername(e.target.value)}
+            />
             <div style={{ marginBottom: "20px" }} />
             <TextField
               label="Password"
               type="password"
               autoComplete="current-password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
+              value={passwordStr}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <div style={{ marginBottom: "20px" }} />
-            <Button variant="contained" onClick={handleSubmit}>Login</Button>
+            <Button variant="contained" onClick={onSubmit}>
+              Login
+            </Button>
           </Stack>
         </CardContent>
       </Card>

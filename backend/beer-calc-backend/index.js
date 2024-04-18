@@ -1,56 +1,75 @@
-// server.js
-
 const express = require('express');
-const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-
-const port = 3000
+const bodyParser = require('body-parser');
 
 const app = express();
-const secretKey = 'yourSecretKey'; // Change this to your secret key
+const PORT = 3000;
+const secretKey = 'fs8dgf67bdf98sfag'; // Secret Key
 
 app.use(bodyParser.json());
+var cors = require('cors');
+app.use(cors());
+
+// Middleware to verify JWT token
+function verifyToken(req, res, next) {
+  const bearerHeader = req.headers['authorization'];
+  
+  if (typeof bearerHeader !== 'undefined') {
+    const bearerToken = bearerHeader.split(' ')[1];
+    req.token = bearerToken;
+    jwt.verify(req.token, secretKey, (err, authData) => {
+      if (err) {
+        res.sendStatus(403); // Forbidden
+      } else {
+        req.authData = authData;
+        next();
+      }
+    });
+  } else {
+    res.sendStatus(401); // Unauthorized
+  }
+}
 
 // Mock user database
 const users = [
-    { id: 1, username: 'user1', password: 'password1' },
-    { id: 2, username: 'user2', password: 'password2' }
+  {
+    id: 1,
+    username: 'Admin',
+    password: 'Admin!123'
+  },
+  {
+    id: 2,
+    username: 'User',
+    password: 'User!123'
+  }
 ];
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// Route to handle user login
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
 
-app.get('/', (req, res) => {
-res.send('Hello World!')
-})
+  // Mock authentication, you should replace this with your actual authentication logic
+  const user = users.find(u => u.username === username && u.password === password);
 
-// Login endpoint
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    const user = users.find(u => u.username === username && u.password === password);
-    if (user) {
-        const token = jwt.sign({ userId: user.id }, secretKey);
+  if (user) {
+    jwt.sign({ user }, secretKey, { expiresIn: '1h' }, (err, token) => {
+      if (err) {
+        res.status(500).json({ error: 'Failed to generate token' });
+      } else {
         res.json({ token });
-    } else {
-        res.status(401).json({ message: 'Invalid username or password' });
-    }
-});
-
-// Protected endpoint
-app.get('/protected', authenticateToken, (req, res) => {
-    res.json({ message: 'Protected resource accessed successfully' });
-});
-
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (token == null) return res.sendStatus(401);
-
-    jwt.verify(token, secretKey, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
+      }
     });
-}
+  } else {
+    res.status(401).json({ error: 'Invalid username or password' });
+  }
+});
 
+// Protected route
+app.get('/api/protected', verifyToken, (req, res) => {
+  res.json({ message: 'Welcome to the protected route!', user: req.authData.user });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
