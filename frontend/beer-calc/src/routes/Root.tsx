@@ -4,21 +4,27 @@ import "../App.css";
 import { Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from 'jwt-decode';
 import axios from "axios";
 import { useState } from "react";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
 
+interface JWTPayload {
+  id: number,
+  username: string,
+  role: string,
+}
+
 function Root() {
-  const signIn = useSignIn();
-  const [usernameStr, setUsername] = useState('');
-  const [passwordStr, setPassword] = useState('');
+  const signIn = useSignIn();  
+  const [usernameStr, setUsername] = useState("");
+  const [passwordStr, setPassword] = useState("");
 
   const onSubmit = (e: any) => {
     e.preventDefault();
     const formData = {
       username: usernameStr,
-      password: passwordStr
+      password: passwordStr,
     };
     axios.post("http://localhost:3000/api/login", formData).then((res) => {
       if (res.status === 200) {
@@ -34,6 +40,15 @@ function Root() {
         ) {
           // Only if you are using refreshToken feature
           // Redirect or do-something
+          console.log("Login successfull");
+          const decodedToken: JWTPayload  = jwtDecode(res.data.token);
+          if (decodedToken.role === 'admin') {
+            // Route to Admin page
+            console.log("Admin");
+          } else if (decodedToken.role! === 'basic') {
+            // Route to basic User page
+            console.log("User");
+          }
         } else {
           //Throw error
         }

@@ -35,12 +35,14 @@ const users = [
   {
     id: 1,
     username: 'Admin',
-    password: 'Admin!123'
+    password: 'Admin!123',
+    role: 'admin'
   },
   {
     id: 2,
     username: 'User',
-    password: 'User!123'
+    password: 'User!123',
+    role: 'basic'
   }
 ];
 
@@ -50,9 +52,10 @@ app.post('/api/login', (req, res) => {
 
   // Mock authentication, you should replace this with your actual authentication logic
   const user = users.find(u => u.username === username && u.password === password);
-
+  
   if (user) {
-    jwt.sign({ user }, secretKey, { expiresIn: '1h' }, (err, token) => {
+    const payloadData = {id: user.id, username: user.username, role: user.role};
+    jwt.sign(payloadData, secretKey, { expiresIn: '1h' }, (err, token) => {
       if (err) {
         res.status(500).json({ error: 'Failed to generate token' });
       } else {
