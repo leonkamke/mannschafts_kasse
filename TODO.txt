@@ -6,3 +6,8 @@ MERN-Stack
 
 Installation:
 - Node.js 18.17
+
+Todo:
+- Routing in React
+- Authentication in Javascript/React
+- MongoDB
