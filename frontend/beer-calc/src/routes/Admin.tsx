@@ -18,11 +18,14 @@ function Admin() {
   };
   return (
     <>
-      <AppBar position="static" color="inherit">
+      <AppBar position="fixed" color="inherit">
         <Toolbar>
           <Typography variant="h6" component="div">
-            My Material-UI Website
+            Admin
           </Typography>
+          <Button variant="contained" onClick={onSignOut}>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
     </>
