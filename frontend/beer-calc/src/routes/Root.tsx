@@ -8,8 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useState } from "react";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
 
 interface JWTPayload {
   id: number;
@@ -51,11 +50,11 @@ function Root() {
             if (decodedToken.role === "admin") {
               // Route to Admin page
               console.log("Admin");
-              navigate("/Admin", {replace: false});
+              navigate("/Admin", { replace: false });
             } else if (decodedToken.role! === "basic") {
               // Route to basic User page
               console.log("User");
-              navigate("/User", {replace: false});
+              navigate("/User", { replace: false });
             }
           } else {
             //Throw error
@@ -71,39 +70,64 @@ function Root() {
 
   return (
     <>
-      <Card
-        sx={{
-          paddingLeft: "20px",
-          paddingRight: "20px",
-          paddingTop: "10px",
-          paddingBottom: "20px",
-          backgroundColor: "#dedede",
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          backgroundColor: "transparent",
         }}
       >
-        <CardContent>
-          <h1 style={{ color: "#101418" }}>Beer Calculator!</h1>
-          <Stack>
-            <TextField
-              label="Username"
-              value={usernameStr}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <div style={{ marginBottom: "20px" }} />
-            <TextField
-              label="Password"
-              type="password"
-              autoComplete="current-password"
-              value={passwordStr}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <div style={{ marginBottom: "20px" }} />
-            <Button variant="contained" onClick={onSubmit}>
-              Login
-            </Button>
-            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-          </Stack>
-        </CardContent>
-      </Card>
+        <Card
+          sx={{
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            paddingTop: "20px",
+            paddingBottom: "30px",
+            backgroundColor: "#101418",
+            borderRadius: 3,
+          }}
+        >
+          <CardContent>
+            <h1 style={{ color: "#ffffff" }}>Mannschaftskasse</h1>
+            <div style={{ marginBottom: "35px" }} />
+            <Stack>
+              <TextField
+                label="Username"
+                variant="outlined"
+                value={usernameStr}
+                onChange={(e) => setUsername(e.target.value)}
+                inputProps={{ style: { color: "white" } }}
+                InputLabelProps={{ style: { color: "white" } }}
+                sx={{
+                  backgroundColor: "#252e38",
+                  borderRadius: "6px", // Set your desired border radius here
+                }}
+              />
+              <div style={{ marginBottom: "20px" }} />
+              <TextField
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                value={passwordStr}
+                onChange={(e) => setPassword(e.target.value)}
+                inputProps={{ style: { color: "white" } }}
+                InputLabelProps={{ style: { color: "white" } }}
+                sx={{
+                  backgroundColor: "#252e38",
+                  borderRadius: "6px", // Set your desired border radius here
+                }}
+              />
+              <div style={{ marginBottom: "20px" }} />
+              <Button variant="contained" onClick={onSubmit}>
+                Login
+              </Button>
+              {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+            </Stack>
+          </CardContent>
+        </Card>
+      </div>
     </>
   );
 }

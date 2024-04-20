@@ -18,28 +18,13 @@ function Admin() {
   };
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" sx={{width: 500}}>
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Admin Page
-            </Typography>
-            <Button color="inherit" onClick={onSignOut}>Sign Out</Button>
-          </Toolbar>
-        </AppBar>
-      </Box>
-      <div>
-        <p>Welcome to our website!</p>
-      </div>
+      <AppBar position="static" color="inherit">
+        <Toolbar>
+          <Typography variant="h6" component="div">
+            My Material-UI Website
+          </Typography>
+        </Toolbar>
+      </AppBar>
     </>
   );
 }
