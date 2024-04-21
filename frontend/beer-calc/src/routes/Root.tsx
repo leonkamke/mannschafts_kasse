@@ -89,8 +89,9 @@ function Root() {
             backgroundColor: "#ffffff",
             borderRadius: 10,
             border: "2px solid",
-            borderColor: "black",
-            width: "400px"
+            borderColor: "grey",
+            width: "400px",
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
           }}
         >
           <h1>Login</h1>

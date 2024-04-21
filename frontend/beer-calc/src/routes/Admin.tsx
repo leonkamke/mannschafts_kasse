@@ -85,7 +85,7 @@ function Admin() {
           padding: "30px",
           top: 0,
           borderBottom: "2px solid",
-          borderColor: "black",
+          borderColor: "grey",
           boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.3)",
           alignItems: "center",
         }}
