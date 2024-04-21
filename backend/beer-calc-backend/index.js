@@ -10,6 +10,37 @@ app.use(bodyParser.json());
 var cors = require('cors');
 app.use(cors());
 
+const dummyTable = [
+  {
+    key: "1",
+    vorname: "David",
+    nachname: "Nilles",
+    offene_kosten: 30,
+    sonstige_kosten: 20,
+  },
+  {
+    key: "2",
+    vorname: "Leon",
+    nachname: "Kamke",
+    offene_kosten: 10,
+    sonstige_kosten: 5,
+  },
+  {
+    key: "3",
+    vorname: "Richard",
+    nachname: "Seibel",
+    offene_kosten: 34,
+    sonstige_kosten: 888,
+  },
+  {
+    key: "4",
+    vorname: "Max",
+    nachname: "Mustermann",
+    offene_kosten: 0,
+    sonstige_kosten: 34,
+  },
+];
+
 // Middleware to verify JWT token
 function verifyToken(req, res, next) {
   const bearerHeader = req.headers['authorization'];
@@ -70,6 +101,11 @@ app.post('/api/login', (req, res) => {
 // Protected route
 app.get('/api/protected', verifyToken, (req, res) => {
   res.json({ message: 'Welcome to the protected route!', user: req.authData.user });
+});
+
+// Fetch Table
+app.get('/api/table', verifyToken, (req, res) => {
+  res.json(dummyTable);
 });
 
 // Start server

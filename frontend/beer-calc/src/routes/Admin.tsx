@@ -1,9 +1,11 @@
 import useSignOut from "react-auth-kit/hooks/useSignOut";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Divider, Radio, Table } from "antd";
 import type { TableColumnsType } from "antd";
 import { Button } from "antd";
+import axios from "axios";
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 interface DataType {
   key: React.Key;
@@ -32,45 +34,14 @@ const columns: TableColumnsType<DataType> = [
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: "1",
-    vorname: "David",
-    nachname: "Nilles",
-    offene_kosten: 30,
-    sonstige_kosten: 20,
-  },
-  {
-    key: "2",
-    vorname: "Leon",
-    nachname: "Kamke",
-    offene_kosten: 10,
-    sonstige_kosten: 5,
-  },
-  {
-    key: "3",
-    vorname: "Richard",
-    nachname: "Seibel",
-    offene_kosten: 34,
-    sonstige_kosten: 888,
-  },
-  {
-    key: "4",
-    vorname: "Max",
-    nachname: "Mustermann",
-    offene_kosten: 0,
-    sonstige_kosten: 34,
-  },
-];
-
-// rowSelection object indicates the need for row selection
-
 function Admin() {
   const navigate = useNavigate();
+  const authHeader = useAuthHeader();
   const signOut = useSignOut();
   const [selectedRow, setSelectedRow] = useState<DataType | undefined>(
     undefined
   );
+  const [tableData, setTableData] = useState<DataType[]>([]);
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
@@ -80,6 +51,22 @@ function Admin() {
       setSelectedRow(selectedRow);
     },
   };
+
+  useEffect(() => {
+    try {
+      axios
+        .get<DataType[]>("http://localhost:3000/api/table", {
+          headers: {
+            Authorization: authHeader,
+          },
+        })
+        .then((res) => {
+          setTableData(res.data);
+        });
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  }, []);
 
   const onSignOut = () => {
     signOut();
@@ -130,7 +117,7 @@ function Admin() {
           }}
           style={{ width: "70%" }}
           columns={columns}
-          dataSource={data}
+          dataSource={tableData}
         />
       </div>
     </>
