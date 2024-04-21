@@ -15,31 +15,46 @@ const dummyTable = [
     key: "1",
     vorname: "David",
     nachname: "Nilles",
-    offene_kosten: 30,
+    bier: 10,
+    softdrinks: 0,
+    monatsbeitrag: 5,
     sonstige_kosten: 20,
+    offene_kosten: 30,
+    gesamtkosten: 50,
   },
   {
     key: "2",
     vorname: "Leon",
     nachname: "Kamke",
-    offene_kosten: 10,
-    sonstige_kosten: 5,
+    bier: 20,
+    softdrinks: 10,
+    monatsbeitrag: 5,
+    sonstige_kosten: 100,
+    offene_kosten: 55,
+    gesamtkosten: 155
   },
   {
     key: "3",
-    vorname: "Richard",
-    nachname: "Seibel",
-    offene_kosten: 34,
-    sonstige_kosten: 888,
+    vorname: "Horny",
+    nachname: "Richi",
+    bier: 1,
+    softdrinks: 0,
+    monatsbeitrag: 5,
+    sonstige_kosten: 10,
+    offene_kosten: 45,
+    gesamtkosten: 55
   },
   {
     key: "4",
     vorname: "Max",
-    nachname: "Mustermann",
-    offene_kosten: 0,
+    nachname: "Muster",
+    bier: 55,
+    softdrinks: 2,
+    monatsbeitrag: 5,
     sonstige_kosten: 34,
+    offene_kosten: 78,
+    gesamtkosten: 303
   },
-  
 ];
 
 // Middleware to verify JWT token
@@ -84,7 +99,6 @@ app.post('/api/login', (req, res) => {
 
   // Mock authentication, you should replace this with your actual authentication logic
   const user = users.find(u => u.username === username && u.password === password);
-  
   if (user) {
     const payloadData = {id: user.id, username: user.username, role: user.role};
     jwt.sign(payloadData, secretKey, { expiresIn: '1h' }, (err, token) => {
@@ -106,6 +120,8 @@ app.get('/api/protected', verifyToken, (req, res) => {
 
 // Fetch Table
 app.get('/api/table', verifyToken, (req, res) => {
+  // SQL Anfragen
+
   res.json(dummyTable);
 });
 

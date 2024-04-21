@@ -11,9 +11,11 @@ interface DataType {
   key: React.Key;
   vorname: string;
   nachname: string;
-  offene_kosten: number;
+  bier: number;
+  softdrinks: number;
+  monatsbeitrag: number;
   sonstige_kosten: number;
-  gesamt_kosten: number;
+  gesamtkosten: number;
 }
 
 const serverIP = "192.168.178.131"
@@ -28,8 +30,16 @@ const columns: TableColumnsType<DataType> = [
     dataIndex: "nachname",
   },
   {
-    title: "Offene Kosten",
-    dataIndex: "offene_kosten",
+    title: "Bier",
+    dataIndex: "bier",
+  },
+  {
+    title: "Softdrinks",
+    dataIndex: "softdrinks",
+  },
+  {
+    title: "Monatsbeitrag",
+    dataIndex: "monatsbeitrag",
   },
   {
     title: "Sonstige Kosten",
@@ -37,8 +47,8 @@ const columns: TableColumnsType<DataType> = [
   },
   {
     title: "Gesamtkosten",
-    dataIndex: "gesamt_kosten",
-  }
+    dataIndex: "gesamtkosten",
+  },
 ];
 
 function Admin() {
