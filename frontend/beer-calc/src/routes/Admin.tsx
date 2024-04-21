@@ -13,7 +13,10 @@ interface DataType {
   nachname: string;
   offene_kosten: number;
   sonstige_kosten: number;
+  gesamt_kosten: number;
 }
+
+const serverIP = "192.168.178.131"
 
 const columns: TableColumnsType<DataType> = [
   {
@@ -32,6 +35,10 @@ const columns: TableColumnsType<DataType> = [
     title: "Sonstige Kosten",
     dataIndex: "sonstige_kosten",
   },
+  {
+    title: "Gesamtkosten",
+    dataIndex: "gesamt_kosten",
+  }
 ];
 
 function Admin() {
@@ -55,7 +62,7 @@ function Admin() {
   useEffect(() => {
     try {
       axios
-        .get<DataType[]>("http://localhost:3000/api/table", {
+        .get<DataType[]>("http://" + serverIP + ":3000/api/table", {
           headers: {
             Authorization: authHeader,
           },

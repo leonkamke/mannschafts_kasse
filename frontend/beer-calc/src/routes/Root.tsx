@@ -18,6 +18,8 @@ interface JWTPayload {
   role: string;
 }
 
+const serverIP = "192.168.178.131"
+
 function Root() {
   const navigate = useNavigate();
   const signIn = useSignIn();
@@ -32,7 +34,7 @@ function Root() {
       password: passwordStr,
     };
     axios
-      .post("http://localhost:3000/api/login", formData)
+      .post("http://" + serverIP + ":3000/api/login", formData)
       .then((res) => {
         if (res.status === 200) {
           if (
