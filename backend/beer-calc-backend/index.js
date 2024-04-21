@@ -39,6 +39,7 @@ const dummyTable = [
     offene_kosten: 0,
     sonstige_kosten: 34,
   },
+  
 ];
 
 // Middleware to verify JWT token

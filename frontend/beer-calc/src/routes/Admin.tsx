@@ -1,7 +1,7 @@
 import useSignOut from "react-auth-kit/hooks/useSignOut";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Divider, Radio, Table } from "antd";
+import { Table, Card } from "antd";
 import type { TableColumnsType } from "antd";
 import { Button } from "antd";
 import axios from "axios";
@@ -116,9 +116,18 @@ function Admin() {
             ...rowSelection,
           }}
           style={{ width: "70%" }}
+          scroll={{ y: 400 }} // Set the height of the table to 400px
           columns={columns}
           dataSource={tableData}
         />
+      </div>
+      <div style={{ marginBottom: "20px" }}></div>
+      <div style={{ justifyContent: "center", display: "flex" }}>
+        <Card title="Edit Row" bordered={true} style={{ width: "70%", borderColor: "black" }}>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+        </Card>
       </div>
     </>
   );
