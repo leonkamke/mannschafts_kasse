@@ -1,4 +1,3 @@
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import "../App.css";
 import { Stack } from "@mui/material";
@@ -9,6 +8,9 @@ import axios from "axios";
 import { useState } from "react";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
 import { useNavigate } from "react-router-dom";
+
+import { Button } from "antd";
+import { Input } from "antd";
 
 interface JWTPayload {
   id: number;
@@ -21,7 +23,7 @@ function Root() {
   const signIn = useSignIn();
   const [usernameStr, setUsername] = useState("");
   const [passwordStr, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(" ");
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -45,7 +47,7 @@ function Root() {
           ) {
             // Only if you are using refreshToken feature
             // Redirect or do-something
-            setErrorMessage("");
+            setErrorMessage(" ");
             const decodedToken: JWTPayload = jwtDecode(res.data.token);
             if (decodedToken.role === "admin") {
               // Route to Admin page
@@ -76,57 +78,62 @@ function Root() {
           justifyContent: "center",
           alignItems: "center",
           minHeight: "100vh",
-          backgroundColor: "transparent",
         }}
       >
-        <Card
-          sx={{
+        <div
+          style={{
             paddingLeft: "20px",
             paddingRight: "20px",
             paddingTop: "20px",
             paddingBottom: "30px",
-            backgroundColor: "#101418",
-            borderRadius: 3,
+            backgroundColor: "#ffffff",
+            borderRadius: 10,
+            border: "2px solid",
+            borderColor: "black",
+            width: "400px"
           }}
         >
-          <CardContent>
-            <h1 style={{ color: "#ffffff" }}>Mannschaftskasse</h1>
-            <div style={{ marginBottom: "35px" }} />
-            <Stack>
-              <TextField
-                label="Username"
-                variant="outlined"
-                value={usernameStr}
-                onChange={(e) => setUsername(e.target.value)}
-                inputProps={{ style: { color: "white" } }}
-                InputLabelProps={{ style: { color: "white" } }}
-                sx={{
-                  backgroundColor: "#252e38",
-                  borderRadius: "6px", // Set your desired border radius here
-                }}
-              />
-              <div style={{ marginBottom: "20px" }} />
-              <TextField
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                value={passwordStr}
-                onChange={(e) => setPassword(e.target.value)}
-                inputProps={{ style: { color: "white" } }}
-                InputLabelProps={{ style: { color: "white" } }}
-                sx={{
-                  backgroundColor: "#252e38",
-                  borderRadius: "6px", // Set your desired border radius here
-                }}
-              />
-              <div style={{ marginBottom: "20px" }} />
-              <Button variant="contained" onClick={onSubmit}>
-                Login
-              </Button>
-              {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-            </Stack>
-          </CardContent>
-        </Card>
+          <h1>Login</h1>
+          <div style={{ marginBottom: "35px" }} />
+          <Stack>
+            <Input
+              placeholder="Username"
+              size="large"
+              onChange={(e) => setUsername(e.target.value)}
+              style={{
+                backgroundColor: "white",
+                borderColor: "#1c1c1c",
+                borderRadius: "6px",
+                color: "black",
+              }}
+            />
+            <div style={{ marginBottom: "20px" }} />
+            <Input.Password
+              placeholder="Password"
+              size="large"
+              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                backgroundColor: "white",
+                borderColor: "#1c1c1c",
+                borderRadius: "6px",
+                color: "black",
+              }}
+            />
+            <div style={{ marginBottom: "20px" }} />
+
+            <Button
+              style={{
+                backgroundColor: "#4285f4",
+                borderColor: "#4285f4",
+                color: "white", // Set text color
+              }}
+              onClick={onSubmit}
+            >
+              Login
+            </Button>
+            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+          </Stack>
+        </div>
       </div>
     </>
   );
