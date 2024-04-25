@@ -18,7 +18,7 @@ interface JWTPayload {
   role: string;
 }
 
-const serverIP = "192.168.178.131"
+const serverIP = "192.168.178.160"
 
 function Root() {
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ function Root() {
       })
       .catch((error) => {
         // console.log("Error occurred:", error);
-        setErrorMessage("An error occurred. Please try again.");
+        setErrorMessage("Du hast verkackt, du Idiot!");
       });
   };
 
@@ -80,6 +80,7 @@ function Root() {
           justifyContent: "center",
           alignItems: "center",
           minHeight: "100vh",
+          
         }}
       >
         <div
