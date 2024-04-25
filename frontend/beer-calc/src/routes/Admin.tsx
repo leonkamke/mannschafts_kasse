@@ -18,36 +18,43 @@ interface DataType {
   gesamtkosten: number;
 }
 
-const serverIP = "192.168.178.131"
+const serverIP = "192.168.178.160"
 
 const columns: TableColumnsType<DataType> = [
   {
     title: "Vorname",
     dataIndex: "vorname",
+    width: 100, // Breite der Spalte in Pixeln
   },
   {
     title: "Nachname",
     dataIndex: "nachname",
+    width: 100,
   },
   {
     title: "Bier",
     dataIndex: "bier",
+    width: 50,
   },
   {
     title: "Softdrinks",
     dataIndex: "softdrinks",
+    width: 100,
   },
   {
     title: "Monatsbeitrag",
     dataIndex: "monatsbeitrag",
+    width: 100,
   },
   {
     title: "Sonstige Kosten",
     dataIndex: "sonstige_kosten",
+    width: 120,
   },
   {
     title: "Gesamtkosten",
     dataIndex: "gesamtkosten",
+    width: 120,
   },
 ];
 
@@ -107,7 +114,7 @@ function Admin() {
           alignItems: "center",
         }}
       >
-        <h1 style={{ margin: 0, textAlign: "center", flexGrow: 1 }}>Admin</h1>
+        <h1 style={{ margin: 0, textAlign: "center", flexGrow: 1 }}>SG Alftal</h1>
         <Button
           onClick={onSignOut}
           style={{
