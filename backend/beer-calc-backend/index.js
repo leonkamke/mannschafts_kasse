@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
+const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
 const PORT = 3000;
@@ -10,54 +11,11 @@ app.use(bodyParser.json());
 var cors = require('cors');
 app.use(cors());
 
-const dummyTable = [
-  {
-    key: "1",
-    vorname: "David",
-    nachname: "Nilles",
-    bier: 10,
-    softdrinks: 0,
-    monatsbeitrag: 5,
-    sonstige_kosten: 20,
-    offene_kosten: 30,
-    gesamtkosten: 50,
-  },
-  {
-    key: "2",
-    vorname: "Leon",
-    nachname: "Kamke",
-    bier: 20,
-    softdrinks: 10,
-    monatsbeitrag: 5,
-    sonstige_kosten: 100,
-    offene_kosten: 55,
-    gesamtkosten: 155
-  },
-  {
-    key: "3",
-    vorname: "Horny",
-    nachname: "Richi",
-    bier: 1,
-    softdrinks: 0,
-    monatsbeitrag: 5,
-    sonstige_kosten: 10,
-    offene_kosten: 45,
-    gesamtkosten: 55
-  },
-  {
-    key: "4",
-    vorname: "Max",
-    nachname: "Muster",
-    bier: 55,
-    softdrinks: 2,
-    monatsbeitrag: 5,
-    sonstige_kosten: 34,
-    offene_kosten: 78,
-    gesamtkosten: 303
-  },
-];
+// Verbindung zur SQLite-Datenbank herstellen
+const dbPath = 'spieler.db';
+const db = new sqlite3.Database(dbPath);
 
-// Middleware to verify JWT token
+// Middleware zum Überprüfen des JWT-Token
 function verifyToken(req, res, next) {
   const bearerHeader = req.headers['authorization'];
   
@@ -77,7 +35,7 @@ function verifyToken(req, res, next) {
   }
 }
 
-// Mock user database
+// Mock-Benutzerdaten
 const users = [
   {
     id: 1,
@@ -93,14 +51,14 @@ const users = [
   }
 ];
 
-// Route to handle user login
+// Route zur Bearbeitung der Benutzeranmeldung
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
 
-  // Mock authentication, you should replace this with your actual authentication logic
+  // Mock-Authentifizierung, sollte durch echte Authentifizierungslogik ersetzt werden
   const user = users.find(u => u.username === username && u.password === password);
   if (user) {
-    const payloadData = {id: user.id, username: user.username, role: user.role};
+    const payloadData = { id: user.id, username: user.username, role: user.role };
     jwt.sign(payloadData, secretKey, { expiresIn: '1h' }, (err, token) => {
       if (err) {
         res.status(500).json({ error: 'Failed to generate token' });
@@ -113,19 +71,26 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-// Protected route
+// Geschützte Route
 app.get('/api/protected', verifyToken, (req, res) => {
   res.json({ message: 'Welcome to the protected route!', user: req.authData.user });
 });
 
-// Fetch Table
+// Route zum Abrufen der Spielerdaten aus der Datenbank
 app.get('/api/table', verifyToken, (req, res) => {
-  // SQL Anfragen
+  const query = 'SELECT * FROM Spieler';
 
-  res.json(dummyTable);
+  db.all(query, (err, rows) => {
+    if (err) {
+      console.error('Fehler beim Abrufen der Spielerdaten aus der Datenbank:', err.message);
+      res.status(500).json({ error: 'Internal server error' });
+    } else {
+      res.json(rows);
+    }
+  });
 });
 
-// Start server
+// Server starten
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server läuft auf http://localhost:${PORT}`);
 });
