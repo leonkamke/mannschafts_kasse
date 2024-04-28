@@ -6,6 +6,9 @@ import type { TableColumnsType } from "antd";
 import { Button } from "antd";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import { Col, Divider, Row } from 'antd';
+import { Input } from "antd";
+
 
 interface DataType {
   key: React.Key;
@@ -24,17 +27,17 @@ const columns: TableColumnsType<DataType> = [
   {
     title: "Vorname",
     dataIndex: "vorname",
-    width: 100, // Breite der Spalte in Pixeln
+    width: 120, // Breite der Spalte in Pixeln
   },
   {
     title: "Nachname",
     dataIndex: "nachname",
-    width: 100,
+    width: 120,
   },
   {
     title: "Bier",
     dataIndex: "bier",
-    width: 50,
+    width: 70,
   },
   {
     title: "Softdrinks",
@@ -44,7 +47,7 @@ const columns: TableColumnsType<DataType> = [
   {
     title: "Monatsbeitrag",
     dataIndex: "monatsbeitrag",
-    width: 100,
+    width: 150,
   },
   {
     title: "Sonstige Kosten",
@@ -54,9 +57,11 @@ const columns: TableColumnsType<DataType> = [
   {
     title: "Gesamtkosten",
     dataIndex: "gesamtkosten",
-    width: 120,
+    width: 130,
   },
 ];
+
+const style: React.CSSProperties = { background: '#0092ff', padding: '8px 0' };
 
 
 function Admin() {
@@ -108,7 +113,7 @@ function Admin() {
           backgroundColor: "white",
           display: "flex",
           justifyContent: "space-between",
-          padding: "30px",
+          padding: "20px",
           top: 0,
           borderBottom: "2px solid",
           borderColor: "grey",
@@ -149,11 +154,120 @@ function Admin() {
         />
       </div>
       <div style={{ marginBottom: "20px" }}></div>
-      <div style={{ justifyContent: "center", display: "flex" }}>
-        <Card title="Edit Row" bordered={true} style={{ width: "70%", borderColor: "black" }}>
-          <p>Card content</p>
-          <p>Card content</p>
-          <p>Card content</p>
+      <div style={{ justifyContent: "center", display: "flex", paddingBottom: 20 }}>
+        <Card title={selectedRow?.vorname ? selectedRow?.vorname + " " + selectedRow?.nachname : "Edit Row"} bordered={true} style={{ width: "75%", borderColor: "black" }}>
+          <Divider orientation="left" style={{ borderColor: 'grey' }}>Bier</Divider>
+          <Row gutter={10}>
+            <Col className="gutter-row" span={6}>
+              <Input
+                placeholder="Bier"
+                size="middle"
+                onChange={(e) => { }}
+                style={{
+                  backgroundColor: "white",
+                  width: 50,
+                  borderColor: "#1c1c1c",
+                  borderRadius: "6px",
+                  color: "black",
+                }}
+              />
+            </Col>
+            <Col className="gutter-row" span={6}>
+              <Button
+                style={{
+                  backgroundColor: "#4285f4",
+                  borderColor: "#4285f4",
+                  color: "white",
+                  marginRight: "20px",
+                }}
+              >
+                +
+              </Button>
+            </Col>
+            <Col className="gutter-row" span={6}>
+              <Button
+                style={{
+                  backgroundColor: "#4285f4",
+                  borderColor: "#4285f4",
+                  color: "white",
+                  marginRight: "20px",
+                }}
+              >
+                -
+              </Button>
+            </Col>
+          </Row>
+          <Divider orientation="left" style={{ borderColor: 'grey' }}>Softdrinks</Divider>
+          <Row gutter={10}>
+            <Col className="gutter-row" span={6}>
+              <Input
+                placeholder="Softdrinks"
+                size="middle"
+                onChange={(e) => { }}
+                style={{
+                  backgroundColor: "white",
+                  width: 50,
+                  borderColor: "#1c1c1c",
+                  borderRadius: "6px",
+                  color: "black",
+                }}
+              />
+            </Col>
+            <Col className="gutter-row" span={6}>
+              <Button
+                style={{
+                  backgroundColor: "#4285f4",
+                  borderColor: "#4285f4",
+                  color: "white",
+                  marginRight: "20px",
+                }}
+              >
+                +
+              </Button>
+            </Col>
+            <Col className="gutter-row" span={6}>
+              <Button
+                style={{
+                  backgroundColor: "#4285f4",
+                  borderColor: "#4285f4",
+                  color: "white",
+                  marginRight: "20px",
+                }}
+              >
+                -
+              </Button>
+            </Col>
+          </Row>
+          <Divider orientation="left" style={{ borderColor: 'grey' }}>Sonstige Kosten</Divider>
+          <Row gutter={10}>
+            <Col className="gutter-row" span={6}>
+              <Input
+                placeholder="Sonst. Kosten"
+                size="middle"
+                onChange={(e) => { }}
+                style={{
+                  backgroundColor: "white",
+                  width: 120,
+                  borderColor: "#1c1c1c",
+                  borderRadius: "6px",
+                  color: "black",
+                }}
+              />
+            </Col>
+          </Row>
+          <Divider orientation="left" style={{ borderColor: 'grey' }}></Divider>
+          <Row justify="end">
+            <Button
+              style={{
+                backgroundColor: "#4285f4",
+                borderColor: "#4285f4",
+                color: "white",
+                marginRight: "20px",
+              }}
+            >
+              Anwenden
+            </Button>
+          </Row>
         </Card>
       </div>
     </>
