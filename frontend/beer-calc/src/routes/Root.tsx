@@ -18,7 +18,7 @@ interface JWTPayload {
   role: string;
 }
 
-const serverIP = "192.168.178.160"
+const serverIP = "localhost" // "192.168.178.160"
 
 function Root() {
   const navigate = useNavigate();
