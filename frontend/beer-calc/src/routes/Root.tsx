@@ -18,7 +18,7 @@ interface JWTPayload {
   role: string;
 }
 
-const serverIP = "localhost" // "192.168.178.160"
+const serverIP =  "192.168.178.160"
 
 function Root() {
   const navigate = useNavigate();
@@ -104,6 +104,7 @@ function Root() {
               placeholder="Username"
               size="large"
               onChange={(e) => setUsername(e.target.value)}
+              onPressEnter={onSubmit}
               style={{
                 backgroundColor: "white",
                 borderColor: "#1c1c1c",
@@ -116,6 +117,7 @@ function Root() {
               placeholder="Password"
               size="large"
               onChange={(e) => setPassword(e.target.value)}
+              onPressEnter={onSubmit}
               style={{
                 backgroundColor: "white",
                 borderColor: "#1c1c1c",
