@@ -6,9 +6,8 @@ import type { TableColumnsType } from "antd";
 import { Button } from "antd";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { Col, Divider, Row } from 'antd';
+import { Col, Divider, Row } from "antd";
 import { Input } from "antd";
-
 
 interface DataType {
   key: React.Key;
@@ -21,7 +20,7 @@ interface DataType {
   gesamtkosten: number;
 }
 
-const serverIP = "localhost" //""192.168.178.160"
+const serverIP = "localhost"; //""192.168.178.160"
 
 const columns: TableColumnsType<DataType> = [
   {
@@ -61,7 +60,6 @@ const columns: TableColumnsType<DataType> = [
   },
 ];
 
-
 function Admin() {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
@@ -72,22 +70,19 @@ function Admin() {
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [bierCnt, setBierCnt] = useState(0);
   const [softDrinkCnt, setSoftDrinkCnt] = useState(0);
-  const [sonstigesCnt, setSonstigesCnt] = useState(0);
-
-
+  const [sonstigesCnt, setSonstigesCnt] = useState("");
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
       // const rowKey = selectedRowKeys[0];
       setBierCnt(0);
       setSoftDrinkCnt(0);
-      setSonstigesCnt(0);
+      setSonstigesCnt("");
       const selectedRow: DataType = selectedRows[0];
       console.log(selectedRow);
       setSelectedRow(selectedRow);
     },
   };
-
 
   useEffect(() => {
     try {
@@ -128,7 +123,9 @@ function Admin() {
           alignItems: "center",
         }}
       >
-        <h1 style={{ margin: 0, textAlign: "center", flexGrow: 1 }}>SG Alftal</h1>
+        <h1 style={{ margin: 0, textAlign: "center", flexGrow: 1 }}>
+          SG Alftal
+        </h1>
         <Button
           onClick={onSignOut}
           style={{
@@ -161,15 +158,28 @@ function Admin() {
         />
       </div>
       <div style={{ marginBottom: "20px" }}></div>
-      <div style={{ justifyContent: "center", display: "flex", paddingBottom: 20 }}>
-        <Card title={selectedRow?.vorname ? selectedRow?.vorname + " " + selectedRow?.nachname : "Edit Row"} bordered={true} style={{ width: "75%", borderColor: "black" }}>
-          <Divider orientation="left" style={{ borderColor: 'grey' }}>Bier</Divider>
+      <div
+        style={{ justifyContent: "center", display: "flex", paddingBottom: 20 }}
+      >
+        <Card
+          title={
+            selectedRow?.vorname
+              ? selectedRow?.vorname + " " + selectedRow?.nachname
+              : "Edit Row"
+          }
+          bordered={true}
+          style={{ width: "75%", borderColor: "black" }}
+        >
+          <Divider orientation="left" style={{ borderColor: "grey" }}>
+            Bier
+          </Divider>
           <Row gutter={10}>
             <Col className="gutter-row" span={6}>
               <Input
                 placeholder="Bier"
+                value={bierCnt}
                 size="middle"
-                onChange={(e) => { }}
+                onChange={(e) => {}}
                 style={{
                   backgroundColor: "white",
                   width: 50,
@@ -179,26 +189,12 @@ function Admin() {
                 }}
               />
             </Col>
+
             <Col className="gutter-row" span={6}>
               <Button
-              onClick={() => {
-                setBierCnt(bierCnt+1);
-              }}
-                style={{
-                  backgroundColor: "#4285f4",
-                  borderColor: "#4285f4",
-                  color: "white",
-                  marginRight: "20px",
+                onClick={() => {
+                  setBierCnt(bierCnt - 1);
                 }}
-              >
-                +
-              </Button>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <Button
-              onClick={() => {
-                setBierCnt(bierCnt-1);
-              }}
                 style={{
                   backgroundColor: "#4285f4",
                   borderColor: "#4285f4",
@@ -209,14 +205,32 @@ function Admin() {
                 -
               </Button>
             </Col>
+            <Col className="gutter-row" span={6}>
+              <Button
+                onClick={() => {
+                  setBierCnt(bierCnt + 1);
+                }}
+                style={{
+                  backgroundColor: "#4285f4",
+                  borderColor: "#4285f4",
+                  color: "white",
+                  marginRight: "20px",
+                }}
+              >
+                +
+              </Button>
+            </Col>
           </Row>
-          <Divider orientation="left" style={{ borderColor: 'grey' }}>Softdrinks</Divider>
+          <Divider orientation="left" style={{ borderColor: "grey" }}>
+            Softdrinks
+          </Divider>
           <Row gutter={10}>
             <Col className="gutter-row" span={6}>
               <Input
+                value={softDrinkCnt}
                 placeholder="Softdrinks"
                 size="middle"
-                onChange={(e) => { }}
+                onChange={(e) => {}}
                 style={{
                   backgroundColor: "white",
                   width: 50,
@@ -228,24 +242,9 @@ function Admin() {
             </Col>
             <Col className="gutter-row" span={6}>
               <Button
-              onClick={() => {
-                setBierCnt(bierCnt+1);
-              }}
-                style={{
-                  backgroundColor: "#4285f4",
-                  borderColor: "#4285f4",
-                  color: "white",
-                  marginRight: "20px",
+                onClick={() => {
+                  setSoftDrinkCnt(softDrinkCnt - 1);
                 }}
-              >
-                +
-              </Button>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <Button
-              onClick={() => {
-                setBierCnt(bierCnt-1);
-              }}
                 style={{
                   backgroundColor: "#4285f4",
                   borderColor: "#4285f4",
@@ -256,14 +255,33 @@ function Admin() {
                 -
               </Button>
             </Col>
+            <Col className="gutter-row" span={6}>
+              <Button
+                onClick={() => {
+                  setSoftDrinkCnt(softDrinkCnt + 1);
+                }}
+                style={{
+                  backgroundColor: "#4285f4",
+                  borderColor: "#4285f4",
+                  color: "white",
+                  marginRight: "20px",
+                }}
+              >
+                +
+              </Button>
+            </Col>
           </Row>
-          <Divider orientation="left" style={{ borderColor: 'grey' }}>Sonstige Kosten</Divider>
+          <Divider orientation="left" style={{ borderColor: "grey" }}>
+            Sonstige Kosten
+          </Divider>
           <Row gutter={10}>
             <Col className="gutter-row" span={6}>
               <Input
                 placeholder="Sonst. Kosten"
                 size="middle"
-                onChange={(e) => { }}
+                onChange={(e) => {
+                  setSonstigesCnt(e.target.value);
+                }}
                 style={{
                   backgroundColor: "white",
                   width: 120,
@@ -274,7 +292,7 @@ function Admin() {
               />
             </Col>
           </Row>
-          <Divider orientation="left" style={{ borderColor: 'grey' }}></Divider>
+          <Divider orientation="left" style={{ borderColor: "grey" }}></Divider>
           <Row justify="end">
             <Button
               style={{
