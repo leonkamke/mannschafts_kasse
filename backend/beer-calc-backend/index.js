@@ -71,6 +71,12 @@ app.post('/api/login', (req, res) => {
   }
 });
 
+app.post('/api/anwenden', verifyToken, (req, res) => {
+  const updatedRow = req.body;
+  
+});
+
+
 // Geschützte Route
 app.get('/api/protected', verifyToken, (req, res) => {
   res.json({ message: 'Welcome to the protected route!', user: req.authData.user });

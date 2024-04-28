@@ -70,16 +70,15 @@ function Admin() {
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [bierCnt, setBierCnt] = useState(0);
   const [softDrinkCnt, setSoftDrinkCnt] = useState(0);
-  const [sonstigesCnt, setSonstigesCnt] = useState("");
+  const [sonstigesEntry, setSonstigesEntry] = useState("");
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
       // const rowKey = selectedRowKeys[0];
       setBierCnt(0);
       setSoftDrinkCnt(0);
-      setSonstigesCnt("");
+      setSonstigesEntry("");
       const selectedRow: DataType = selectedRows[0];
-      console.log(selectedRow);
       setSelectedRow(selectedRow);
     },
   };
@@ -279,8 +278,9 @@ function Admin() {
               <Input
                 placeholder="Sonst. Kosten"
                 size="middle"
+                value={sonstigesEntry}
                 onChange={(e) => {
-                  setSonstigesCnt(e.target.value);
+                  setSonstigesEntry(e.target.value);
                 }}
                 style={{
                   backgroundColor: "white",
@@ -294,20 +294,70 @@ function Admin() {
           </Row>
           <Divider orientation="left" style={{ borderColor: "grey" }}></Divider>
           <Row justify="end">
-            <Button
-              style={{
-                backgroundColor: "#4285f4",
-                borderColor: "#4285f4",
-                color: "white",
-                marginRight: "20px",
-              }}
-            >
-              Anwenden
-            </Button>
+            <Col style={{ textAlign: "right" }}>
+              <Button
+                style={{
+                  backgroundColor: "#d43737",
+                  borderColor: "black",
+                  color: "white",
+                  marginRight: "20px",
+                }}
+              >
+                Alles bezahlt
+              </Button>
+              <div style={{ marginTop: 10 }} />
+              <Button
+                onClick={() => {
+                  if (selectedRow && !isNaN(Number(sonstigesEntry))) {
+                    const updatedRow = {
+                      key: selectedRow.key,
+                      bier: bierCnt,
+                      softdrinks: softDrinkCnt,
+                      sonstige_kosten: Number(sonstigesEntry),
+                    };
+                    onAnwenden(authHeader, updatedRow);
+                  } else {
+                    
+                  }
+                }}
+                style={{
+                  backgroundColor: "#4285f4",
+                  borderColor: "#4285f4",
+                  color: "white",
+                  marginRight: "20px",
+                }}
+              >
+                Anwenden
+              </Button>
+            </Col>
           </Row>
         </Card>
       </div>
     </>
   );
 }
+
 export default Admin;
+
+function onAnwenden(authHeader: any, updatedRow: any) {
+  if (updatedRow) {
+    try {
+      axios
+        .post("http://" + serverIP + ":3000/api/anwenden", updatedRow, {
+          headers: {
+            Authorization: authHeader,
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            // Seite aktualisieren
+            
+          }
+        })
+        .catch((error) => {
+          // console.log("Error occurred:", error);
+          // setErrorMessage("Du hast verkackt, du Idiot!");
+        });
+    } catch (error) {}
+  }
+}
