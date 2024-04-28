@@ -61,8 +61,6 @@ const columns: TableColumnsType<DataType> = [
   },
 ];
 
-const style: React.CSSProperties = { background: '#0092ff', padding: '8px 0' };
-
 
 function Admin() {
   const navigate = useNavigate();
@@ -72,15 +70,24 @@ function Admin() {
     undefined
   );
   const [tableData, setTableData] = useState<DataType[]>([]);
+  const [bierCnt, setBierCnt] = useState(0);
+  const [softDrinkCnt, setSoftDrinkCnt] = useState(0);
+  const [sonstigesCnt, setSonstigesCnt] = useState(0);
+
+
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
       // const rowKey = selectedRowKeys[0];
+      setBierCnt(0);
+      setSoftDrinkCnt(0);
+      setSonstigesCnt(0);
       const selectedRow: DataType = selectedRows[0];
       console.log(selectedRow);
       setSelectedRow(selectedRow);
     },
   };
+
 
   useEffect(() => {
     try {
@@ -174,6 +181,9 @@ function Admin() {
             </Col>
             <Col className="gutter-row" span={6}>
               <Button
+              onClick={() => {
+                setBierCnt(bierCnt+1);
+              }}
                 style={{
                   backgroundColor: "#4285f4",
                   borderColor: "#4285f4",
@@ -186,6 +196,9 @@ function Admin() {
             </Col>
             <Col className="gutter-row" span={6}>
               <Button
+              onClick={() => {
+                setBierCnt(bierCnt-1);
+              }}
                 style={{
                   backgroundColor: "#4285f4",
                   borderColor: "#4285f4",
@@ -215,6 +228,9 @@ function Admin() {
             </Col>
             <Col className="gutter-row" span={6}>
               <Button
+              onClick={() => {
+                setBierCnt(bierCnt+1);
+              }}
                 style={{
                   backgroundColor: "#4285f4",
                   borderColor: "#4285f4",
@@ -227,6 +243,9 @@ function Admin() {
             </Col>
             <Col className="gutter-row" span={6}>
               <Button
+              onClick={() => {
+                setBierCnt(bierCnt-1);
+              }}
                 style={{
                   backgroundColor: "#4285f4",
                   borderColor: "#4285f4",
