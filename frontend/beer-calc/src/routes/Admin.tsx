@@ -58,6 +58,7 @@ const columns: TableColumnsType<DataType> = [
   },
 ];
 
+
 function Admin() {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
@@ -69,7 +70,7 @@ function Admin() {
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-      const rowKey = selectedRowKeys[0];
+      // const rowKey = selectedRowKeys[0];
       const selectedRow: DataType = selectedRows[0];
       console.log(selectedRow);
       setSelectedRow(selectedRow);
@@ -86,6 +87,7 @@ function Admin() {
         })
         .then((res) => {
           setTableData(res.data);
+          console.log(res.data);
         });
     } catch (error) {
       console.error("Failed to fetch data:", error);
