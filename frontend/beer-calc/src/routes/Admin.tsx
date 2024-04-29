@@ -6,7 +6,7 @@ import type { TableColumnsType } from "antd";
 import { Button } from "antd";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { Col, Divider, Row } from "antd";
+import { Col, Divider, Row, ConfigProvider, Popconfirm } from "antd";
 import { Input } from "antd";
 
 interface DataType {
@@ -295,16 +295,30 @@ function Admin() {
           <Divider orientation="left" style={{ borderColor: "grey" }}></Divider>
           <Row justify="end">
             <Col style={{ textAlign: "right" }}>
-              <Button
-                style={{
-                  backgroundColor: "#d43737",
-                  borderColor: "black",
-                  color: "white",
-                  marginRight: "20px",
+              <Popconfirm
+                placement="top"
+                title={"Alles abrechnen"}
+                description={
+                  "Sicher, dass " + selectedRow?.vorname + " alles bezahlt hat?"
+                }
+                okText="Ja"
+                cancelText="Nein"
+                onConfirm={() => {
+                  onAnwenden(authHeader, )
                 }}
               >
-                Alles bezahlt
-              </Button>
+                <Button
+                  style={{
+                    backgroundColor: "#d43737",
+                    borderColor: "black",
+                    color: "white",
+                    marginRight: "20px",
+                  }}
+                >
+                  Alles abrechnen
+                </Button>
+              </Popconfirm>
+
               <div style={{ marginTop: 10 }} />
               <Button
                 onClick={() => {
@@ -315,9 +329,9 @@ function Admin() {
                       softdrinks: softDrinkCnt,
                       sonstige_kosten: Number(sonstigesEntry),
                     };
+
                     onAnwenden(authHeader, updatedRow);
                   } else {
-                    
                   }
                 }}
                 style={{
@@ -351,7 +365,6 @@ function onAnwenden(authHeader: any, updatedRow: any) {
         .then((res) => {
           if (res.status === 200) {
             // Seite aktualisieren
-            
           }
         })
         .catch((error) => {
