@@ -555,6 +555,9 @@ function Admin() {
                     });
                   } else {
                   }
+                  setBierCnt(0);
+                  setSoftDrinkCnt(0);
+                  setSonstigesEntry("");
                 }}
                 style={{
                   backgroundColor: "#4285f4",
