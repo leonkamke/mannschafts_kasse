@@ -304,7 +304,9 @@ function Admin() {
                 okText="Ja"
                 cancelText="Nein"
                 onConfirm={() => {
-                  onAnwenden(authHeader, )
+                  if (selectedRow) {
+                    onAllesAbrechnen(authHeader, { key: selectedRow.key });
+                  }
                 }}
               >
                 <Button
@@ -358,6 +360,28 @@ function onAnwenden(authHeader: any, updatedRow: any) {
     try {
       axios
         .post("http://" + serverIP + ":3000/api/anwenden", updatedRow, {
+          headers: {
+            Authorization: authHeader,
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            // Seite aktualisieren
+          }
+        })
+        .catch((error) => {
+          // console.log("Error occurred:", error);
+          // setErrorMessage("Du hast verkackt, du Idiot!");
+        });
+    } catch (error) {}
+  }
+}
+
+function onAllesAbrechnen(authHeader: any, updatedRow: any) {
+  if (updatedRow) {
+    try {
+      axios
+        .post("http://" + serverIP + ":3000/api/abrechnen", updatedRow, {
           headers: {
             Authorization: authHeader,
           },
