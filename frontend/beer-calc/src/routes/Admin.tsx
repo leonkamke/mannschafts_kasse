@@ -262,7 +262,7 @@ function Admin() {
           columns={columns}
           dataSource={tableData}
           pagination={{
-            pageSize: 100,
+            pageSize: 999,
             position: []
           }}
         />
