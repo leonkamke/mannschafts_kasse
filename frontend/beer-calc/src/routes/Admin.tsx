@@ -125,7 +125,7 @@ function Admin() {
             // console.log("Error occurred:", error);
             // setErrorMessage("Du hast verkackt, du Idiot!");
           });
-      } catch (error) {}
+      } catch (error) { }
     }
     return undefined;
   }
@@ -152,8 +152,8 @@ function Admin() {
               setTableData(res.data);
             }
           })
-          .catch((error) => {});
-      } catch (error) {}
+          .catch((error) => { });
+      } catch (error) { }
     }
     return undefined;
   }
@@ -178,7 +178,7 @@ function Admin() {
             // console.log("Error occurred:", error);
             // setErrorMessage("Du hast verkackt, du Idiot!");
           });
-      } catch (error) {}
+      } catch (error) { }
     }
   }
 
@@ -202,7 +202,7 @@ function Admin() {
             // console.log("Error occurred:", error);
             // setErrorMessage("Du hast verkackt, du Idiot!");
           });
-      } catch (error) {}
+      } catch (error) { }
     }
   }
 
@@ -213,20 +213,18 @@ function Admin() {
 
   return (
     <>
-    {contextHolder}
+      {contextHolder}
       <div
         style={{
-          width: "100%",
-          height: "60px",
           backgroundColor: "white",
           display: "flex",
           justifyContent: "space-between",
-          padding: "20px",
+          padding: "10px",
           top: 0,
           borderBottom: "2px solid",
           borderColor: "grey",
-          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.3)",
           alignItems: "center",
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)"
         }}
       >
         <h1 style={{ margin: 0, textAlign: "center", flexGrow: 1 }}>
@@ -256,16 +254,20 @@ function Admin() {
             type: "radio",
             ...rowSelection,
           }}
-          style={{ width: "70%" }}
+          style={{
+            width: "70%",
+          }}
+          bordered={true}
           scroll={{ y: 400 }} // Set the height of the table to 400px
           columns={columns}
           dataSource={tableData}
           pagination={{
             pageSize: 100,
+            position: []
           }}
         />
       </div>
-      <div style={{ marginBottom: "12px" }}></div>
+      <div style={{ marginBottom: "18px" }}></div>
       <div
         style={{
           justifyContent: "center",
@@ -330,35 +332,36 @@ function Admin() {
         </Modal>
 
         <Button
-                onClick={() => setisdeleteUserOpen(true)}
-                disabled={selectedRow === undefined}
-                style={{
-                  backgroundColor: "#d43737",
-                  borderColor: "#d43737",
-                  color: "white",
-                  marginRight: "20px",
-                }}
-              >
-                Spieler löschen
-              </Button>
-              <Modal
-                title="Spieler löschen"
-                open={isdeleteUserOpen}
-                onOk={() => {
-                  if (selectedRow) {
-                    onSpielerLoeschen(authHeader, { key: selectedRow.key });
-                    setisdeleteUserOpen(false);
-                  }
-                }}
-                onCancel={() => setisdeleteUserOpen(false)}
-                okText="Ja"
-                cancelText="Nein"
-              >
-                Sicher, dass {selectedRow?.vorname} {selectedRow?.nachname}{" "}
-                gelöscht werden soll?
-              </Modal>
+          onClick={() => setisdeleteUserOpen(true)}
+          disabled={selectedRow === undefined}
+          style={{
+            backgroundColor: "#d43737",
+            borderColor: "#d43737",
+            color: "white",
+            marginRight: "20px",
+          }}
+        >
+          Spieler löschen
+        </Button>
+        <Modal
+          title="Spieler löschen"
+          open={isdeleteUserOpen}
+          onOk={() => {
+            if (selectedRow) {
+              onSpielerLoeschen(authHeader, { key: selectedRow.key });
+              setisdeleteUserOpen(false);
+            }
+          }}
+          onCancel={() => setisdeleteUserOpen(false)}
+          okText="Ja"
+          cancelText="Nein"
+        >
+          Sicher, dass {selectedRow?.vorname} {selectedRow?.nachname}{" "}
+          gelöscht werden soll?
+        </Modal>
 
       </div>
+      <Divider orientation="left" style={{ borderColor: "grey" }}></Divider>
       <div style={{ marginBottom: "30px" }}></div>
 
       <div
@@ -371,7 +374,7 @@ function Admin() {
               : "Edit Row"
           }
           bordered={true}
-          style={{ width: "75%", borderColor: "black" }}
+          style={{ width: "75%", borderColor: "black", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)", }}
         >
           <Divider orientation="left" style={{ borderColor: "grey" }}>
             Bier
@@ -383,7 +386,7 @@ function Admin() {
                 placeholder="Bier"
                 value={bierCnt}
                 size="middle"
-                onChange={(e) => {}}
+                onChange={(e) => { }}
                 style={{
                   backgroundColor: "white",
                   width: 50,
@@ -437,7 +440,7 @@ function Admin() {
                 value={softDrinkCnt}
                 placeholder="Softdrinks"
                 size="middle"
-                onChange={(e) => {}}
+                onChange={(e) => { }}
                 style={{
                   backgroundColor: "white",
                   width: 50,
