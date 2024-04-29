@@ -7,7 +7,7 @@ import { Button } from "antd";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { Col, Divider, Row, ConfigProvider, Popconfirm, Modal } from "antd";
-import { Input } from "antd";
+import { Input, message } from "antd";
 
 interface DataType {
   key: React.Key;
@@ -77,6 +77,8 @@ function Admin() {
   const [VornameLoeschen, VachnameLoeschen] = useState("");
   const [neuerVorname, setNeuerVorname] = useState("");
   const [neuerNachname, setNeuerNachname] = useState("");
+  const [messageApi, contextHolder] = message.useMessage();
+
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
@@ -211,6 +213,7 @@ function Admin() {
 
   return (
     <>
+    {contextHolder}
       <div
         style={{
           width: "100%",
@@ -542,7 +545,14 @@ function Admin() {
                       softdrinks: softDrinkCnt,
                       sonstige_kosten: Number(sonstigesEntry),
                     };
-                    const result = await onAnwenden(authHeader, updatedRow);
+                    await onAnwenden(authHeader, updatedRow);
+                    messageApi.open({
+                      type: 'success',
+                      content: 'This is a success message',
+                      style: {
+                        paddingTop: 120
+                      }
+                    });
                   } else {
                   }
                 }}
