@@ -88,6 +88,7 @@ app.post("/api/anwenden", verifyToken, (req, res) => {
       sonstige_kosten = sonstige_kosten + ${updatedRow.sonstige_kosten}
   WHERE key = ${updatedRow.key}`;
 
+  
   db.all(query, (err, rows) => {
     if (err) {
       console.error(
@@ -98,14 +99,43 @@ app.post("/api/anwenden", verifyToken, (req, res) => {
     } else {
       res.json(rows);
     }
+  });  
+  const query2 = `UPDATE Spieler
+  SET gesamtkosten = (bier * 1.5) + sonstige_kosten`;
+
+  db.all(query2, (err, rows) => {
+    if (err) {
+      console.error(
+        "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
+        err.message
+      );
+      res.status(500).json({ error: "Internal server error" });   
+    }
   });
+
 });
 
 app.post("/api/abrechnen", verifyToken, (req, res) => {
-  console.log("alles abrechnen");
-  console.log(req.body);
-  const query = "";
+  const updatedRow = req.body;
+  const query = `UPDATE Spieler
+  SET bier = 0,
+      softdrinks = 0,
+      sonstige_kosten = 0,
+      gesamtkosten = 0
+  WHERE key = ${updatedRow.key}`;
+
   
+  db.all(query, (err, rows) => {
+    if (err) {
+      console.error(
+        "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
+        err.message
+      );
+      res.status(500).json({ error: "Internal server error" });
+    } else {
+      res.json(rows);
+    }
+  });  
   
 });
 
