@@ -106,6 +106,25 @@ app.post("/api/anwenden", verifyToken, (req, res) => {
   });
 });
 
+app.post("/api/spielerloeschen", verifyToken, (req, res) => {
+  const updatedRow = req.body;
+
+  db.serialize(() => {
+    // Execute the first statement
+    db.run(`DELETE FROM Spieler
+    WHERE key = ${updatedRow.key}`);
+
+    // Execute the third statement after the second one completes
+    db.all("SELECT * FROM Spieler", (err, rows) => {
+      if (err) {
+        console.error("Error:", err.message);
+      } else {
+        res.json(rows);
+      }
+    });
+  });
+});
+
 app.post("/api/abrechnen", verifyToken, (req, res) => {
   const updatedRow = req.body;
 

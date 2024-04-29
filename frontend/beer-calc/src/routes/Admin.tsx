@@ -72,7 +72,9 @@ function Admin() {
   const [softDrinkCnt, setSoftDrinkCnt] = useState(0);
   const [sonstigesEntry, setSonstigesEntry] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isdeleteUserOpen, setisdeleteUserOpen] = useState(false);
   const [isCreateUserOpen, setCreateUserOpen] = useState(false);
+  const [VornameLoeschen, VachnameLoeschen] = useState("");
   const [neuerVorname, setNeuerVorname] = useState("");
   const [neuerNachname, setNeuerNachname] = useState("");
 
@@ -159,6 +161,30 @@ function Admin() {
       try {
         axios
           .post("http://" + serverIP + ":3000/api/abrechnen", updatedRow, {
+            headers: {
+              Authorization: authHeader,
+            },
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              // Seite aktualisieren
+              setTableData(res.data);
+              setCreateUserOpen(false);
+            }
+          })
+          .catch((error) => {
+            // console.log("Error occurred:", error);
+            // setErrorMessage("Du hast verkackt, du Idiot!");
+          });
+      } catch (error) {}
+    }
+  }
+
+  function onSpielerLoeschen(authHeader: any, updatedRow: any) {
+    if (updatedRow) {
+      try {
+        axios
+          .post("http://" + serverIP + ":3000/api/spielerloeschen", updatedRow, {
             headers: {
               Authorization: authHeader,
             },
@@ -299,6 +325,36 @@ function Admin() {
             }}
           />
         </Modal>
+
+        <Button
+                onClick={() => setisdeleteUserOpen(true)}
+                disabled={selectedRow === undefined}
+                style={{
+                  backgroundColor: "#d43737",
+                  borderColor: "#d43737",
+                  color: "white",
+                  marginRight: "20px",
+                }}
+              >
+                Spieler löschen
+              </Button>
+              <Modal
+                title="Spieler löschen"
+                open={isdeleteUserOpen}
+                onOk={() => {
+                  if (selectedRow) {
+                    onSpielerLoeschen(authHeader, { key: selectedRow.key });
+                    setisdeleteUserOpen(false);
+                  }
+                }}
+                onCancel={() => setisdeleteUserOpen(false)}
+                okText="Ja"
+                cancelText="Nein"
+              >
+                Sicher, dass {selectedRow?.vorname} {selectedRow?.nachname}{" "}
+                gelöscht werden soll?
+              </Modal>
+
       </div>
       <div style={{ marginBottom: "30px" }}></div>
 
