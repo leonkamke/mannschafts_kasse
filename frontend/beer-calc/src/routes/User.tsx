@@ -66,21 +66,6 @@ function User() {
     undefined
   );
   const [tableData, setTableData] = useState<DataType[]>([]);
-  const [bierCnt, setBierCnt] = useState(0);
-  const [softDrinkCnt, setSoftDrinkCnt] = useState(0);
-  const [sonstigesEntry, setSonstigesEntry] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-      // const rowKey = selectedRowKeys[0];
-      setBierCnt(0);
-      setSoftDrinkCnt(0);
-      setSonstigesEntry("");
-      const selectedRow: DataType = selectedRows[0];
-      setSelectedRow(selectedRow);
-    },
-  };
 
   useEffect(() => {
     try {
@@ -147,7 +132,7 @@ function User() {
           scroll={{ y: 400 }} // Set the height of the table to 400px
           columns={columns}
           dataSource={tableData}
-          pagination={{ pageSize: 40 }}
+          pagination={{ position: [] }}
         />
       </div>
     </>

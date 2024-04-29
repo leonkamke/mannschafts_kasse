@@ -195,11 +195,11 @@ function Admin() {
             type: "radio",
             ...rowSelection,
           }}
+          pagination={{ position: [] }}
           style={{ width: "70%" }}
           scroll={{ y: 400 }} // Set the height of the table to 400px
           columns={columns}
           dataSource={tableData}
-          pagination={{ pageSize: 40 }}
         />
       </div>
       <div style={{ marginBottom: "20px" }}></div>
