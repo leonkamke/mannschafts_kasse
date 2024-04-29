@@ -72,6 +72,9 @@ function Admin() {
   const [softDrinkCnt, setSoftDrinkCnt] = useState(0);
   const [sonstigesEntry, setSonstigesEntry] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateUserOpen, setCreateUserOpen] = useState(false);
+  const [neuerVorname, setNeuerVorname] = useState("");
+  const [neuerNachname, setNeuerNachname] = useState("");
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
@@ -123,6 +126,34 @@ function Admin() {
     return undefined;
   }
 
+  function neuerSpieler(
+    authHeader: any,
+    neuerVorname: string,
+    neuerNachname: string
+  ) {
+    if (neuerVorname && neuerNachname) {
+      try {
+        axios
+          .post(
+            "http://" + serverIP + ":3000/api/neuer_spieler",
+            { neuerVorname: neuerVorname, neuerNachname: neuerNachname },
+            {
+              headers: {
+                Authorization: authHeader,
+              },
+            }
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              setTableData(res.data);
+            }
+          })
+          .catch((error) => {});
+      } catch (error) {}
+    }
+    return undefined;
+  }
+
   function onAllesAbrechnen(authHeader: any, updatedRow: any) {
     if (updatedRow) {
       try {
@@ -136,6 +167,7 @@ function Admin() {
             if (res.status === 200) {
               // Seite aktualisieren
               setTableData(res.data);
+              setCreateUserOpen(false);
             }
           })
           .catch((error) => {
@@ -195,14 +227,81 @@ function Admin() {
             type: "radio",
             ...rowSelection,
           }}
-          pagination={{ position: [] }}
           style={{ width: "70%" }}
           scroll={{ y: 400 }} // Set the height of the table to 400px
           columns={columns}
           dataSource={tableData}
+          pagination={{
+            pageSize: 100,
+          }}
         />
       </div>
-      <div style={{ marginBottom: "20px" }}></div>
+      <div style={{ marginBottom: "12px" }}></div>
+      <div
+        style={{
+          justifyContent: "center",
+          display: "flex",
+        }}
+      >
+        <Button
+          onClick={() => {
+            setCreateUserOpen(true);
+          }}
+          style={{
+            backgroundColor: "#4285f4",
+            borderColor: "#4285f4",
+            color: "white",
+            marginRight: "20px",
+          }}
+        >
+          Spieler hinzufügen
+        </Button>
+        <Modal
+          title="Spieler hinzufügen"
+          open={isCreateUserOpen}
+          onOk={() => {
+            // api request senden
+            if (neuerVorname.length > 1 && neuerNachname.length > 1) {
+              neuerSpieler(authHeader, neuerVorname, neuerNachname);
+              setCreateUserOpen(false);
+            }
+          }}
+          onCancel={() => setCreateUserOpen(false)}
+          okText="Erstellen"
+          cancelText="Abbrechen"
+        >
+          <div style={{ marginTop: 20 }} />
+          <Input
+            placeholder="Vorname"
+            size="large"
+            onChange={(e) => {
+              setNeuerVorname(e.target.value);
+            }}
+            style={{
+              backgroundColor: "white",
+              borderColor: "#1c1c1c",
+              borderRadius: "6px",
+              color: "black",
+            }}
+          />
+          <div style={{ marginTop: 15 }} />
+          <Input
+            placeholder="Nachname"
+            size="large"
+            onChange={(e) => {
+              setNeuerNachname(e.target.value);
+            }}
+            style={{
+              backgroundColor: "white",
+              borderColor: "#1c1c1c",
+              borderRadius: "6px",
+              color: "black",
+            }}
+          />
+        </Modal>
+      </div>
+      <div style={{ marginBottom: "30px" }}></div>
+
       <div
         style={{ justifyContent: "center", display: "flex", paddingBottom: 20 }}
       >
@@ -366,8 +465,8 @@ function Admin() {
                 onOk={() => {
                   if (selectedRow) {
                     onAllesAbrechnen(authHeader, { key: selectedRow.key });
+                    setIsModalOpen(false);
                   }
-                  setIsModalOpen(false);
                 }}
                 onCancel={() => setIsModalOpen(false)}
                 okText="Ja"
@@ -387,9 +486,7 @@ function Admin() {
                       softdrinks: softDrinkCnt,
                       sonstige_kosten: Number(sonstigesEntry),
                     };
-                    console.log("xxxxxxxx");
                     const result = await onAnwenden(authHeader, updatedRow);
-                    console.log(result);
                   } else {
                   }
                 }}

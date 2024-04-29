@@ -81,89 +81,69 @@ app.post("/api/login", (req, res) => {
 
 app.post("/api/anwenden", verifyToken, (req, res) => {
   const updatedRow = req.body;
-  console.log(updatedRow);
-  const query = `UPDATE Spieler
-  SET bier = bier + ${updatedRow.bier},
-      softdrinks = softdrinks + ${updatedRow.softdrinks},
-      sonstige_kosten = sonstige_kosten + ${updatedRow.sonstige_kosten}
-  WHERE key = ${updatedRow.key}`;
 
-  db.all(query, (err, rows) => {
-    if (err) {
-      console.error(
-        "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
-        err.message
-      );
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
-  const query2 = `UPDATE Spieler
-  SET gesamtkosten = (bier * 1.5) + softdrinks + sonstige_kosten`;
+  db.serialize(() => {
+    // Execute the first statement
+    db.run(`UPDATE Spieler
+    SET bier = bier + ${updatedRow.bier},
+        softdrinks = softdrinks + ${updatedRow.softdrinks},
+        sonstige_kosten = sonstige_kosten + ${updatedRow.sonstige_kosten}
+    WHERE key = ${updatedRow.key}`);
 
-  db.all(query2, (err, rows) => {
-    if (err) {
-      console.error(
-        "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
-        err.message
-      );
-      res.status(500).json({ error: "Internal server error" });
-    } else {
-    }
-  });
+    // Execute the second statement after the first one completes
+    db.run(
+      "UPDATE Spieler SET gesamtkosten = (bier * 1.5) + softdrinks + sonstige_kosten"
+    );
 
-  const query3 = "SELECT * FROM Spieler";
-  db.all(query3, (err, rows) => {
-    if (err) {
-      console.error(
-        "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
-        err.message
-      );
-      res.status(500).json({ error: "Internal server error" });
-    } else {
-      res.json(rows);
-    }
+    // Execute the third statement after the second one completes
+    db.all("SELECT * FROM Spieler", (err, rows) => {
+      if (err) {
+        console.error("Error:", err.message);
+      } else {
+        res.json(rows);
+      }
+    });
   });
 });
 
 app.post("/api/abrechnen", verifyToken, (req, res) => {
   const updatedRow = req.body;
-  const query = `UPDATE Spieler
-  SET bier = 0,
-      softdrinks = 0,
-      sonstige_kosten = 0,
-      gesamtkosten = 0
-  WHERE key = ${updatedRow.key}`;
 
-  db.all(query, (err, rows) => {
-    if (err) {
-      console.error(
-        "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
-        err.message
-      );
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
+  db.serialize(() => {
+    // Execute the first statement
+    db.run(`UPDATE Spieler
+    SET bier = 0,
+        softdrinks = 0,
+        sonstige_kosten = 0,
+        gesamtkosten = 0
+    WHERE key = ${updatedRow.key}`);
 
-  const query2 = "SELECT * FROM Spieler";
-
-  db.all(query2, (err, rows) => {
-    if (err) {
-      console.error(
-        "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
-        err.message
-      );
-      res.status(500).json({ error: "Internal server error" });
-    } else {
-      res.json(rows);
-    }
+    // Execute the third statement after the second one completes
+    db.all("SELECT * FROM Spieler", (err, rows) => {
+      if (err) {
+        console.error("Error:", err.message);
+      } else {
+        res.json(rows);
+      }
+    });
   });
 });
 
-// Geschützte Route
-app.get("/api/protected", verifyToken, (req, res) => {
-  res.json({
-    message: "Welcome to the protected route!",
-    user: req.authData.user,
+app.post("/api/neuer_spieler", verifyToken, (req, res) => {
+  const updatedRow = req.body;
+  
+  db.serialize(() => {
+    // Execute the first statement
+    db.run(`INSERT INTO Spieler(vorname, nachname, bier, softdrinks, monatsbeitrag, sonstige_kosten, gesamtkosten) VALUES(?, ?, ?, ?, ?, ?, ?);`, [updatedRow.neuerVorname, updatedRow.neuerNachname, 0, 0, 0, 0, 0]);
+
+    // Execute the third statement after the second one completes
+    db.all("SELECT * FROM Spieler", (err, rows) => {
+      if (err) {
+        console.error("Error:", err.message);
+      } else {
+        res.json(rows);
+      }
+    });
   });
 });
 
