@@ -6,8 +6,6 @@ import type { TableColumnsType } from "antd";
 import { Button } from "antd";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { Col, Divider, Row, Modal } from "antd";
-import { Input } from "antd";
 
 interface DataType {
   key: React.Key;

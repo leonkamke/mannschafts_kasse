@@ -1,3 +1,6 @@
+# Self ignores
+./backend/beer-calc-backend/spieler.db
+
 # Logs
 logs
 *.log

@@ -221,6 +221,7 @@ function Admin() {
           <Row gutter={10}>
             <Col className="gutter-row" span={6}>
               <Input
+                disabled={selectedRow === undefined}
                 placeholder="Bier"
                 value={bierCnt}
                 size="middle"
@@ -246,6 +247,7 @@ function Admin() {
                   color: "white",
                   marginRight: "20px",
                 }}
+                disabled={selectedRow === undefined}
               >
                 -
               </Button>
@@ -261,6 +263,7 @@ function Admin() {
                   color: "white",
                   marginRight: "20px",
                 }}
+                disabled={selectedRow === undefined}
               >
                 +
               </Button>
@@ -272,6 +275,7 @@ function Admin() {
           <Row gutter={10}>
             <Col className="gutter-row" span={6}>
               <Input
+                disabled={selectedRow === undefined}
                 value={softDrinkCnt}
                 placeholder="Softdrinks"
                 size="middle"
@@ -290,6 +294,7 @@ function Admin() {
                 onClick={() => {
                   setSoftDrinkCnt(softDrinkCnt - 1);
                 }}
+                disabled={selectedRow === undefined}
                 style={{
                   backgroundColor: "#4285f4",
                   borderColor: "#4285f4",
@@ -302,6 +307,7 @@ function Admin() {
             </Col>
             <Col className="gutter-row" span={6}>
               <Button
+                disabled={selectedRow === undefined}
                 onClick={() => {
                   setSoftDrinkCnt(softDrinkCnt + 1);
                 }}
@@ -322,6 +328,7 @@ function Admin() {
           <Row gutter={10}>
             <Col className="gutter-row" span={6}>
               <Input
+                disabled={selectedRow === undefined}
                 placeholder="Sonst. Kosten"
                 size="middle"
                 value={sonstigesEntry}
@@ -343,9 +350,10 @@ function Admin() {
             <Col style={{ textAlign: "right" }}>
               <Button
                 onClick={() => setIsModalOpen(true)}
+                disabled={selectedRow === undefined}
                 style={{
                   backgroundColor: "#d43737",
-                  borderColor: "black",
+                  borderColor: "#d43737",
                   color: "white",
                   marginRight: "20px",
                 }}
@@ -370,6 +378,7 @@ function Admin() {
               </Modal>
               <div style={{ marginTop: 10 }} />
               <Button
+                disabled={selectedRow === undefined}
                 onClick={async () => {
                   if (selectedRow && !isNaN(Number(sonstigesEntry))) {
                     const updatedRow = {
