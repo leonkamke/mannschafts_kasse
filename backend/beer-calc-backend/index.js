@@ -88,8 +88,31 @@ app.post("/api/anwenden", verifyToken, (req, res) => {
       sonstige_kosten = sonstige_kosten + ${updatedRow.sonstige_kosten}
   WHERE key = ${updatedRow.key}`;
 
-  
   db.all(query, (err, rows) => {
+    if (err) {
+      console.error(
+        "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
+        err.message
+      );
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+  const query2 = `UPDATE Spieler
+  SET gesamtkosten = (bier * 1.5) + softdrinks + sonstige_kosten`;
+
+  db.all(query2, (err, rows) => {
+    if (err) {
+      console.error(
+        "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
+        err.message
+      );
+      res.status(500).json({ error: "Internal server error" });
+    } else {
+    }
+  });
+
+  const query3 = "SELECT * FROM Spieler";
+  db.all(query3, (err, rows) => {
     if (err) {
       console.error(
         "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
@@ -99,20 +122,7 @@ app.post("/api/anwenden", verifyToken, (req, res) => {
     } else {
       res.json(rows);
     }
-  });  
-  const query2 = `UPDATE Spieler
-  SET gesamtkosten = (bier * 1.5) + sonstige_kosten`;
-
-  db.all(query2, (err, rows) => {
-    if (err) {
-      console.error(
-        "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
-        err.message
-      );
-      res.status(500).json({ error: "Internal server error" });   
-    }
   });
-
 });
 
 app.post("/api/abrechnen", verifyToken, (req, res) => {
@@ -124,8 +134,19 @@ app.post("/api/abrechnen", verifyToken, (req, res) => {
       gesamtkosten = 0
   WHERE key = ${updatedRow.key}`;
 
-  
   db.all(query, (err, rows) => {
+    if (err) {
+      console.error(
+        "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
+        err.message
+      );
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  const query2 = "SELECT * FROM Spieler";
+
+  db.all(query2, (err, rows) => {
     if (err) {
       console.error(
         "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
@@ -135,8 +156,7 @@ app.post("/api/abrechnen", verifyToken, (req, res) => {
     } else {
       res.json(rows);
     }
-  });  
-  
+  });
 });
 
 // Geschützte Route

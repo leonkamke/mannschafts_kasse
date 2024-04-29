@@ -94,12 +94,57 @@ function Admin() {
         })
         .then((res) => {
           setTableData(res.data);
-          console.log(res.data);
         });
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
   }, []);
+
+  function onAnwenden(authHeader: any, updatedRow: any) {
+    if (updatedRow) {
+      try {
+        axios
+          .post("http://" + serverIP + ":3000/api/anwenden", updatedRow, {
+            headers: {
+              Authorization: authHeader,
+            },
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              setTableData(res.data);
+            }
+          })
+          .catch((error) => {
+            // console.log("Error occurred:", error);
+            // setErrorMessage("Du hast verkackt, du Idiot!");
+          });
+      } catch (error) {}
+    }
+    return undefined;
+  }
+
+  function onAllesAbrechnen(authHeader: any, updatedRow: any) {
+    if (updatedRow) {
+      try {
+        axios
+          .post("http://" + serverIP + ":3000/api/abrechnen", updatedRow, {
+            headers: {
+              Authorization: authHeader,
+            },
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              // Seite aktualisieren
+              setTableData(res.data);
+            }
+          })
+          .catch((error) => {
+            // console.log("Error occurred:", error);
+            // setErrorMessage("Du hast verkackt, du Idiot!");
+          });
+      } catch (error) {}
+    }
+  }
 
   const onSignOut = () => {
     signOut();
@@ -320,11 +365,12 @@ function Admin() {
                 okText="Ja"
                 cancelText="Nein"
               >
-                Sicher, dass {selectedRow?.vorname} {selectedRow?.nachname} alles bezahlt hat?
+                Sicher, dass {selectedRow?.vorname} {selectedRow?.nachname}{" "}
+                alles bezahlt hat?
               </Modal>
               <div style={{ marginTop: 10 }} />
               <Button
-                onClick={() => {
+                onClick={async () => {
                   if (selectedRow && !isNaN(Number(sonstigesEntry))) {
                     const updatedRow = {
                       key: selectedRow.key,
@@ -332,8 +378,9 @@ function Admin() {
                       softdrinks: softDrinkCnt,
                       sonstige_kosten: Number(sonstigesEntry),
                     };
-
-                    onAnwenden(authHeader, updatedRow);
+                    console.log("xxxxxxxx");
+                    const result = await onAnwenden(authHeader, updatedRow);
+                    console.log(result);
                   } else {
                   }
                 }}
@@ -355,47 +402,3 @@ function Admin() {
 }
 
 export default Admin;
-
-function onAnwenden(authHeader: any, updatedRow: any) {
-  if (updatedRow) {
-    try {
-      axios
-        .post("http://" + serverIP + ":3000/api/anwenden", updatedRow, {
-          headers: {
-            Authorization: authHeader,
-          },
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            // Seite aktualisieren
-          }
-        })
-        .catch((error) => {
-          // console.log("Error occurred:", error);
-          // setErrorMessage("Du hast verkackt, du Idiot!");
-        });
-    } catch (error) {}
-  }
-}
-
-function onAllesAbrechnen(authHeader: any, updatedRow: any) {
-  if (updatedRow) {
-    try {
-      axios
-        .post("http://" + serverIP + ":3000/api/abrechnen", updatedRow, {
-          headers: {
-            Authorization: authHeader,
-          },
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            // Seite aktualisieren
-          }
-        })
-        .catch((error) => {
-          // console.log("Error occurred:", error);
-          // setErrorMessage("Du hast verkackt, du Idiot!");
-        });
-    } catch (error) {}
-  }
-}
