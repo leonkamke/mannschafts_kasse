@@ -12,7 +12,7 @@ var cors = require("cors");
 app.use(cors());
 
 // Verbindung zur SQLite-Datenbank herstellen
-const dbPath = "spieler.db";
+const dbPath = "./database/spieler.db";
 const db = new sqlite3.Database(dbPath);
 
 // Middleware zum Überprüfen des JWT-Token
