@@ -6,7 +6,7 @@ import type { TableColumnsType } from "antd";
 import { Button } from "antd";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { Col, Divider, Row, ConfigProvider, Popconfirm } from "antd";
+import { Col, Divider, Row, ConfigProvider, Popconfirm, Modal } from "antd";
 import { Input } from "antd";
 
 interface DataType {
@@ -71,6 +71,7 @@ function Admin() {
   const [bierCnt, setBierCnt] = useState(0);
   const [softDrinkCnt, setSoftDrinkCnt] = useState(0);
   const [sonstigesEntry, setSonstigesEntry] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
@@ -295,32 +296,32 @@ function Admin() {
           <Divider orientation="left" style={{ borderColor: "grey" }}></Divider>
           <Row justify="end">
             <Col style={{ textAlign: "right" }}>
-              <Popconfirm
-                placement="top"
-                title={"Alles abrechnen"}
-                description={
-                  "Sicher, dass " + selectedRow?.vorname + " alles bezahlt hat?"
-                }
-                okText="Ja"
-                cancelText="Nein"
-                onConfirm={() => {
+              <Button
+                onClick={() => setIsModalOpen(true)}
+                style={{
+                  backgroundColor: "#d43737",
+                  borderColor: "black",
+                  color: "white",
+                  marginRight: "20px",
+                }}
+              >
+                Alles abrechnen
+              </Button>
+              <Modal
+                title="Alles Abrechnen"
+                open={isModalOpen}
+                onOk={() => {
                   if (selectedRow) {
                     onAllesAbrechnen(authHeader, { key: selectedRow.key });
                   }
+                  setIsModalOpen(false);
                 }}
+                onCancel={() => setIsModalOpen(false)}
+                okText="Ja"
+                cancelText="Nein"
               >
-                <Button
-                  style={{
-                    backgroundColor: "#d43737",
-                    borderColor: "black",
-                    color: "white",
-                    marginRight: "20px",
-                  }}
-                >
-                  Alles abrechnen
-                </Button>
-              </Popconfirm>
-
+                Sicher, dass {selectedRow?.vorname} {selectedRow?.nachname} alles bezahlt hat?
+              </Modal>
               <div style={{ marginTop: 10 }} />
               <Button
                 onClick={() => {
