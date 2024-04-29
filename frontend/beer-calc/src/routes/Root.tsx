@@ -8,6 +8,7 @@ import axios from "axios";
 import { useState } from "react";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
 import { useNavigate } from "react-router-dom";
+import { sha3_256 } from "js-sha3";
 
 import { Button } from "antd";
 import { Input } from "antd";
@@ -18,7 +19,7 @@ interface JWTPayload {
   role: string;
 }
 
-const serverIP =  "192.168.178.160"
+const serverIP = "localhost"; //"192.168.178.160"
 
 function Root() {
   const navigate = useNavigate();
@@ -80,7 +81,6 @@ function Root() {
           justifyContent: "center",
           alignItems: "center",
           minHeight: "100vh",
-          
         }}
       >
         <div
@@ -94,7 +94,7 @@ function Root() {
             border: "2px solid",
             borderColor: "grey",
             width: "400px",
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
           }}
         >
           <h1>Login</h1>
@@ -116,7 +116,9 @@ function Root() {
             <Input.Password
               placeholder="Password"
               size="large"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(sha3_256(e.target.value));
+              }}
               onPressEnter={onSubmit}
               style={{
                 backgroundColor: "white",

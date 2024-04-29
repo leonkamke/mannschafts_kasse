@@ -40,13 +40,13 @@ const users = [
   {
     id: 1,
     username: 'Admin',
-    password: 'Admin!123',
+    password: 'c108a97b99c821af18f88430e1ed64d43638184c52dd6c678ae5a342d0f48fcd',
     role: 'admin'
   },
   {
     id: 2,
     username: 'User',
-    password: 'User!123',
+    password: '7c9af92a81e431548b72455e44016d5a6939f0bc25740f2f91a8a1c59cfaa4cc',
     role: 'basic'
   }
 ];
