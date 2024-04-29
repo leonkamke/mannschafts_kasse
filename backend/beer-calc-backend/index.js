@@ -18,7 +18,7 @@ const db = new sqlite3.Database(dbPath);
 // Middleware zum Überprüfen des JWT-Token
 function verifyToken(req, res, next) {
   const bearerHeader = req.headers['authorization'];
-  
+
   if (typeof bearerHeader !== 'undefined') {
     const bearerToken = bearerHeader.split(' ')[1];
     req.token = bearerToken;
@@ -73,7 +73,21 @@ app.post('/api/login', (req, res) => {
 
 app.post('/api/anwenden', verifyToken, (req, res) => {
   const updatedRow = req.body;
-  
+  console.log(updatedRow)
+  const query = `UPDATE Spieler
+  SET bier = bier + ${updatedRow.bier},
+      softdrinks = softdrinks + ${updatedRow.softdrinks},
+      sonstige_kosten = sonstige_kosten + ${updatedRow.sonstige_kosten}
+  WHERE key = ${updatedRow.key}`;
+
+  db.all(query, (err, rows) => {
+    if (err) {
+      console.error('Fehler beim Abrufen der Spielerdaten aus der Datenbank:', err.message);
+      res.status(500).json({ error: 'Internal server error' });
+    } else {
+      res.json(rows);
+    }
+  });
 });
 
 
