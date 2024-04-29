@@ -6,7 +6,7 @@ import type { TableColumnsType } from "antd";
 import { Button } from "antd";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { Col, Divider, Row, ConfigProvider, Popconfirm, Modal } from "antd";
+import { Col, Divider, Row, Modal } from "antd";
 import { Input } from "antd";
 
 interface DataType {
@@ -100,52 +100,6 @@ function User() {
     }
   }, []);
 
-  function onAnwenden(authHeader: any, updatedRow: any) {
-    if (updatedRow) {
-      try {
-        axios
-          .post("http://" + serverIP + ":3000/api/anwenden", updatedRow, {
-            headers: {
-              Authorization: authHeader,
-            },
-          })
-          .then((res) => {
-            if (res.status === 200) {
-              setTableData(res.data);
-            }
-          })
-          .catch((error) => {
-            // console.log("Error occurred:", error);
-            // setErrorMessage("Du hast verkackt, du Idiot!");
-          });
-      } catch (error) {}
-    }
-    return undefined;
-  }
-
-  function onAllesAbrechnen(authHeader: any, updatedRow: any) {
-    if (updatedRow) {
-      try {
-        axios
-          .post("http://" + serverIP + ":3000/api/abrechnen", updatedRow, {
-            headers: {
-              Authorization: authHeader,
-            },
-          })
-          .then((res) => {
-            if (res.status === 200) {
-              // Seite aktualisieren
-              setTableData(res.data);
-            }
-          })
-          .catch((error) => {
-            // console.log("Error occurred:", error);
-            // setErrorMessage("Du hast verkackt, du Idiot!");
-          });
-      } catch (error) {}
-    }
-  }
-
   const onSignOut = () => {
     signOut();
     navigate("/", { replace: true });
@@ -191,211 +145,12 @@ function User() {
         }}
       >
         <Table
-          rowSelection={{
-            type: "radio",
-            ...rowSelection,
-          }}
           style={{ width: "70%" }}
           scroll={{ y: 400 }} // Set the height of the table to 400px
           columns={columns}
           dataSource={tableData}
           pagination={{ pageSize: 40 }}
         />
-      </div>
-      <div style={{ marginBottom: "20px" }}></div>
-      <div
-        style={{ justifyContent: "center", display: "flex", paddingBottom: 20 }}
-      >
-        <Card
-          title={
-            selectedRow?.vorname
-              ? selectedRow?.vorname + " " + selectedRow?.nachname
-              : "Edit Row"
-          }
-          bordered={true}
-          style={{ width: "75%", borderColor: "black" }}
-        >
-          <Divider orientation="left" style={{ borderColor: "grey" }}>
-            Bier
-          </Divider>
-          <Row gutter={10}>
-            <Col className="gutter-row" span={6}>
-              <Input
-                placeholder="Bier"
-                value={bierCnt}
-                size="middle"
-                onChange={(e) => {}}
-                style={{
-                  backgroundColor: "white",
-                  width: 50,
-                  borderColor: "#1c1c1c",
-                  borderRadius: "6px",
-                  color: "black",
-                }}
-              />
-            </Col>
-
-            <Col className="gutter-row" span={6}>
-              <Button
-                onClick={() => {
-                  setBierCnt(bierCnt - 1);
-                }}
-                style={{
-                  backgroundColor: "#4285f4",
-                  borderColor: "#4285f4",
-                  color: "white",
-                  marginRight: "20px",
-                }}
-              >
-                -
-              </Button>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <Button
-                onClick={() => {
-                  setBierCnt(bierCnt + 1);
-                }}
-                style={{
-                  backgroundColor: "#4285f4",
-                  borderColor: "#4285f4",
-                  color: "white",
-                  marginRight: "20px",
-                }}
-              >
-                +
-              </Button>
-            </Col>
-          </Row>
-          <Divider orientation="left" style={{ borderColor: "grey" }}>
-            Softdrinks
-          </Divider>
-          <Row gutter={10}>
-            <Col className="gutter-row" span={6}>
-              <Input
-                value={softDrinkCnt}
-                placeholder="Softdrinks"
-                size="middle"
-                onChange={(e) => {}}
-                style={{
-                  backgroundColor: "white",
-                  width: 50,
-                  borderColor: "#1c1c1c",
-                  borderRadius: "6px",
-                  color: "black",
-                }}
-              />
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <Button
-                onClick={() => {
-                  setSoftDrinkCnt(softDrinkCnt - 1);
-                }}
-                style={{
-                  backgroundColor: "#4285f4",
-                  borderColor: "#4285f4",
-                  color: "white",
-                  marginRight: "20px",
-                }}
-              >
-                -
-              </Button>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <Button
-                onClick={() => {
-                  setSoftDrinkCnt(softDrinkCnt + 1);
-                }}
-                style={{
-                  backgroundColor: "#4285f4",
-                  borderColor: "#4285f4",
-                  color: "white",
-                  marginRight: "20px",
-                }}
-              >
-                +
-              </Button>
-            </Col>
-          </Row>
-          <Divider orientation="left" style={{ borderColor: "grey" }}>
-            Sonstige Kosten
-          </Divider>
-          <Row gutter={10}>
-            <Col className="gutter-row" span={6}>
-              <Input
-                placeholder="Sonst. Kosten"
-                size="middle"
-                value={sonstigesEntry}
-                onChange={(e) => {
-                  setSonstigesEntry(e.target.value);
-                }}
-                style={{
-                  backgroundColor: "white",
-                  width: 120,
-                  borderColor: "#1c1c1c",
-                  borderRadius: "6px",
-                  color: "black",
-                }}
-              />
-            </Col>
-          </Row>
-          <Divider orientation="left" style={{ borderColor: "grey" }}></Divider>
-          <Row justify="end">
-            <Col style={{ textAlign: "right" }}>
-              <Button
-                onClick={() => setIsModalOpen(true)}
-                style={{
-                  backgroundColor: "#d43737",
-                  borderColor: "black",
-                  color: "white",
-                  marginRight: "20px",
-                }}
-              >
-                Alles abrechnen
-              </Button>
-              <Modal
-                title="Alles Abrechnen"
-                open={isModalOpen}
-                onOk={() => {
-                  if (selectedRow) {
-                    onAllesAbrechnen(authHeader, { key: selectedRow.key });
-                  }
-                  setIsModalOpen(false);
-                }}
-                onCancel={() => setIsModalOpen(false)}
-                okText="Ja"
-                cancelText="Nein"
-              >
-                Sicher, dass {selectedRow?.vorname} {selectedRow?.nachname}{" "}
-                alles bezahlt hat?
-              </Modal>
-              <div style={{ marginTop: 10 }} />
-              <Button
-                onClick={async () => {
-                  if (selectedRow && !isNaN(Number(sonstigesEntry))) {
-                    const updatedRow = {
-                      key: selectedRow.key,
-                      bier: bierCnt,
-                      softdrinks: softDrinkCnt,
-                      sonstige_kosten: Number(sonstigesEntry),
-                    };
-                    console.log("xxxxxxxx");
-                    const result = await onAnwenden(authHeader, updatedRow);
-                    console.log(result);
-                  } else {
-                  }
-                }}
-                style={{
-                  backgroundColor: "#4285f4",
-                  borderColor: "#4285f4",
-                  color: "white",
-                  marginRight: "20px",
-                }}
-              >
-                Anwenden
-              </Button>
-            </Col>
-          </Row>
-        </Card>
       </div>
     </>
   );
