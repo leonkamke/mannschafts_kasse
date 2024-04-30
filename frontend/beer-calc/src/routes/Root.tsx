@@ -1,15 +1,11 @@
-import TextField from "@mui/material/TextField";
 import "../App.css";
 import { Stack } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useState } from "react";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
 import { useNavigate } from "react-router-dom";
 import { sha3_256 } from "js-sha3";
-
 import { Button } from "antd";
 import { Input } from "antd";
 
@@ -91,12 +87,11 @@ function Root() {
             paddingBottom: "30px",
             backgroundColor: "#3C4042",
             borderRadius: 10,
-            border: "2px solid",
             width: "400px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
           }}
         >
-          <h1 style={{color: "white"}}>Login</h1>
+          <h1 style={{color: "lightgrey"}}>Login</h1>
           <div style={{ marginBottom: "35px" }} />
           <Stack>
             <Input

@@ -223,7 +223,7 @@ function Admin() {
           alignItems: "center",
         }}
       >
-        <h1 style={{color: "white", margin: 0, textAlign: "center", flexGrow: 1 }}>
+        <h1 style={{color: "lightgrey", margin: 0, textAlign: "center", flexGrow: 1 }}>
           SG Alftal
         </h1>
         <Button
@@ -356,14 +356,12 @@ function Admin() {
         style={{ justifyContent: "center", display: "flex", paddingBottom: 20 }}
       >
         <Card
-          title={
-            selectedRow?.vorname
-              ? selectedRow?.vorname + " " + selectedRow?.nachname
-              : "Edit Row"
-          }
           bordered={true}
-          style={{ width: "100%", borderColor: "black", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)", }}
+          style={{ width: "100%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)", }}
         >
+          <h2>{selectedRow?.vorname
+              ? selectedRow?.vorname + " " + selectedRow?.nachname
+              : "Edit Row"}</h2>
           <Divider orientation="left" style={{ borderColor: "grey" }}>
             Bier
           </Divider>
