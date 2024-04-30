@@ -87,17 +87,16 @@ function Root() {
           style={{
             paddingLeft: "20px",
             paddingRight: "20px",
-            paddingTop: "20px",
+            paddingTop: "0px",
             paddingBottom: "30px",
-            backgroundColor: "#ffffff",
+            backgroundColor: "#3C4042",
             borderRadius: 10,
             border: "2px solid",
-            borderColor: "grey",
             width: "400px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
           }}
         >
-          <h1>Login</h1>
+          <h1 style={{color: "white"}}>Login</h1>
           <div style={{ marginBottom: "35px" }} />
           <Stack>
             <Input
@@ -105,12 +104,6 @@ function Root() {
               size="large"
               onChange={(e) => setUsername(e.target.value)}
               onPressEnter={onSubmit}
-              style={{
-                backgroundColor: "white",
-                borderColor: "#1c1c1c",
-                borderRadius: "6px",
-                color: "black",
-              }}
             />
             <div style={{ marginBottom: "20px" }} />
             <Input.Password
@@ -120,19 +113,11 @@ function Root() {
                 setPassword(sha3_256(e.target.value));
               }}
               onPressEnter={onSubmit}
-              style={{
-                backgroundColor: "white",
-                borderColor: "#1c1c1c",
-                borderRadius: "6px",
-                color: "black",
-              }}
             />
             <div style={{ marginBottom: "20px" }} />
 
             <Button
               style={{
-                backgroundColor: "#4285f4",
-                borderColor: "#4285f4",
                 color: "white", // Set text color
               }}
               onClick={onSubmit}

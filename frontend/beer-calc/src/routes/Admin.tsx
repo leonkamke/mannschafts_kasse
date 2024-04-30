@@ -216,18 +216,14 @@ function Admin() {
       {contextHolder}
       <div
         style={{
-          backgroundColor: "white",
           display: "flex",
           justifyContent: "space-between",
-          padding: "10px",
+          paddingTop: "10px",
           top: 0,
-          borderBottom: "2px solid",
-          borderColor: "grey",
           alignItems: "center",
-          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)"
         }}
       >
-        <h1 style={{ margin: 0, textAlign: "center", flexGrow: 1 }}>
+        <h1 style={{color: "white", margin: 0, textAlign: "center", flexGrow: 1 }}>
           SG Alftal
         </h1>
         <Button
@@ -242,11 +238,14 @@ function Admin() {
           Logout
         </Button>
       </div>
+      <Divider orientation="left" style={{ borderColor: "grey" }}></Divider>
       <div style={{ marginBottom: "30px" }}></div>
       <div
         style={{
           justifyContent: "center",
           display: "flex",
+          paddingLeft: 10,
+          paddingRight: 10,
         }}
       >
         <Table
@@ -255,7 +254,6 @@ function Admin() {
             ...rowSelection,
           }}
           style={{
-            width: "70%",
           }}
           bordered={true}
           scroll={{ y: 400 }} // Set the height of the table to 400px
@@ -308,12 +306,7 @@ function Admin() {
             onChange={(e) => {
               setNeuerVorname(e.target.value);
             }}
-            style={{
-              backgroundColor: "white",
-              borderColor: "#1c1c1c",
-              borderRadius: "6px",
-              color: "black",
-            }}
+            
           />
           <div style={{ marginTop: 15 }} />
           <Input
@@ -322,12 +315,7 @@ function Admin() {
             onChange={(e) => {
               setNeuerNachname(e.target.value);
             }}
-            style={{
-              backgroundColor: "white",
-              borderColor: "#1c1c1c",
-              borderRadius: "6px",
-              color: "black",
-            }}
+            
           />
         </Modal>
 
@@ -374,7 +362,7 @@ function Admin() {
               : "Edit Row"
           }
           bordered={true}
-          style={{ width: "75%", borderColor: "black", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)", }}
+          style={{ width: "100%", borderColor: "black", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)", }}
         >
           <Divider orientation="left" style={{ borderColor: "grey" }}>
             Bier
@@ -388,11 +376,7 @@ function Admin() {
                 size="middle"
                 onChange={(e) => { }}
                 style={{
-                  backgroundColor: "white",
                   width: 50,
-                  borderColor: "#1c1c1c",
-                  borderRadius: "6px",
-                  color: "black",
                 }}
               />
             </Col>
@@ -442,11 +426,7 @@ function Admin() {
                 size="middle"
                 onChange={(e) => { }}
                 style={{
-                  backgroundColor: "white",
                   width: 50,
-                  borderColor: "#1c1c1c",
-                  borderRadius: "6px",
-                  color: "black",
                 }}
               />
             </Col>
@@ -497,11 +477,7 @@ function Admin() {
                   setSonstigesEntry(e.target.value);
                 }}
                 style={{
-                  backgroundColor: "white",
                   width: 120,
-                  borderColor: "#1c1c1c",
-                  borderRadius: "6px",
-                  color: "black",
                 }}
               />
             </Col>
