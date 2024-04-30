@@ -20,7 +20,7 @@ interface DataType {
   gesamtkosten: number;
 }
 
-const serverIP = "localhost"; //""192.168.178.160"
+const serverIP = "192.168.50.95"; //""192.168.178.160"
 
 const columns: TableColumnsType<DataType> = [
   {
@@ -525,7 +525,7 @@ function Admin() {
                     await onAnwenden(authHeader, updatedRow);
                     messageApi.open({
                       type: 'success',
-                      content: 'This is a success message',
+                      content: 'Erfolgreich eingetragen!',
                       style: {
                         paddingTop: 120
                       }
