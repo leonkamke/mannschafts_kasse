@@ -85,7 +85,7 @@ function Root() {
             paddingRight: "20px",
             paddingTop: "0px",
             paddingBottom: "30px",
-            backgroundColor: "#3C4042",
+            backgroundColor: "#141414",
             borderRadius: 10,
             width: "400px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
@@ -113,13 +113,15 @@ function Root() {
 
             <Button
               style={{
-                color: "white", // Set text color
+                color: "white",
+                width: "170px",
+                alignSelf: "center",
               }}
               onClick={onSubmit}
             >
               Login
             </Button>
-            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+            {errorMessage && <p style={{ color: "#ff6669" }}>{errorMessage}</p>}
           </Stack>
         </div>
       </div>
