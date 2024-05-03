@@ -19,7 +19,7 @@ interface DataType {
   gesamtkosten: number;
 }
 
-const serverIP = "192.168.50.95"; //""192.168.178.160"
+const serverIP = "localhost"; //""192.168.178.160"
 
 const columns: TableColumnsType<DataType> = [
   {
