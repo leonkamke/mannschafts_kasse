@@ -75,6 +75,8 @@ function Root() {
           justifyContent: "center",
           alignItems: "center",
           minHeight: "100vh",
+          //   backgroundSize: "cover",
+          //  backgroundPosition: "center",
         }}
       >
         <div
@@ -89,7 +91,16 @@ function Root() {
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
           }}
         >
-          <h1 style={{color: "lightgrey"}}>Login</h1>
+          <div
+            style={{
+              backgroundImage: `url('SGAlftal.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              width: 100,
+              height: 100
+            }}
+          />
+          <h1 style={{ color: "lightgrey" }}>SG Alftal</h1>
           <div style={{ marginBottom: "35px" }} />
           <Stack>
             <Input
