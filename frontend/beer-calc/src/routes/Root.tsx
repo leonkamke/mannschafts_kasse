@@ -51,9 +51,11 @@ function Root() {
             if (decodedToken.role === "admin") {
               // Route to Admin page
               navigate("/Admin", { replace: false });
-            } else if (decodedToken.role! === "basic") {
+            } else if (decodedToken.role === "basic") {
               // Route to basic User page
               navigate("/Spieler", { replace: false });
+            } else if (decodedToken.role === "moderator") {
+              navigate("/Moderator", {replace: false})
             }
           } else {
             //Throw error
@@ -105,7 +107,6 @@ function Root() {
               placeholder="Password"
               size="large"
               onChange={(e) => {
-                console.log(sha3_256(e.target.value));
                 setPassword(sha3_256(e.target.value));
               }}
               onPressEnter={onSubmit}

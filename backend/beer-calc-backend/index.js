@@ -16,18 +16,65 @@ const dbPath = "./database/spieler.db";
 const db = new sqlite3.Database(dbPath);
 
 // Middleware zum Überprüfen des JWT-Token
-function verifyToken(req, res, next) {
+function verifySpieler(req, res, next) {
   const bearerHeader = req.headers["authorization"];
 
   if (typeof bearerHeader !== "undefined") {
     const bearerToken = bearerHeader.split(" ")[1];
+    console.log(bearerToken);
+
     req.token = bearerToken;
     jwt.verify(req.token, secretKey, (err, authData) => {
       if (err) {
         res.sendStatus(403); // Forbidden
       } else {
+        console.log(authData);
         req.authData = authData;
         next();
+      }
+    });
+  } else {
+    res.sendStatus(401); // Unauthorized
+  }
+}
+
+function verifyModerator(req, res, next) {
+  const bearerHeader = req.headers["authorization"];
+
+  if (typeof bearerHeader !== "undefined") {
+    const bearerToken = bearerHeader.split(" ")[1];
+    console.log(bearerToken);
+
+    req.token = bearerToken;
+    jwt.verify(req.token, secretKey, (err, authData) => {
+      if (err || !(authData.role === "moderator" || authData.role === "admin")) {
+        res.sendStatus(403); // Forbidden
+      } else {
+        console.log(authData);
+        req.authData = authData;
+        next();      
+      }
+    });
+  } else {
+    res.sendStatus(401); // Unauthorized
+  }
+}
+
+function verifyAdmin(req, res, next) {
+  const bearerHeader = req.headers["authorization"];
+
+  if (typeof bearerHeader !== "undefined") {
+    const bearerToken = bearerHeader.split(" ")[1];
+    console.log(bearerToken);
+
+    req.token = bearerToken;
+    jwt.verify(req.token, secretKey, (err, authData) => {
+      if (err || authData.role !== "admin") {
+        res.sendStatus(403); // Forbidden
+      } else {
+        console.log(authData);
+        req.authData = authData;
+        next();      
       }
     });
   } else {
@@ -86,13 +133,12 @@ app.post("/api/login", (req, res) => {
   }
 });
 
-app.post("/api/anwenden", verifyToken, (req, res) => {
+app.post("/api/anwenden_admin", verifyAdmin, (req, res) => {
   const updatedRows = req.body;
   const vornameArray = req.body.vornamen;
   const nachnameArray = req.body.nachnamen;
 
   db.serialize(() => {
-    
     db.run(`UPDATE Spieler
     SET bier = bier + ${updatedRows.bier},
         softdrinks = softdrinks + ${updatedRows.softdrinks},
@@ -140,7 +186,65 @@ app.post("/api/anwenden", verifyToken, (req, res) => {
   });
 });
 
-app.post("/api/spielerloeschen", verifyToken, (req, res) => {
+app.post("/api/anwenden_mod", verifyModerator, (req, res) => {
+  const updatedRows = req.body;
+  const vornameArray = req.body.vornamen;
+  const nachnameArray = req.body.nachnamen;
+
+  if (updatedRows.bier < 0 || updatedRows.sonstige_kosten < 0 || updatedRows.softdrinks < 0) {
+    console.error("Error Moderator: Negative Zahlen benutzt");
+    return;
+  }
+
+  db.serialize(() => {
+    db.run(`UPDATE Spieler
+    SET bier = bier + ${updatedRows.bier},
+        softdrinks = softdrinks + ${updatedRows.softdrinks},
+        sonstige_kosten = ROUND(sonstige_kosten + ${updatedRows.sonstige_kosten}, 2)
+    WHERE key IN (${updatedRows.keys})`);
+
+    // Execute the second statement after the first one completes
+    db.run(
+      "UPDATE Spieler SET gesamtkosten = (bier * 1.5) + softdrinks + sonstige_kosten + monatsbeitrag"
+    );
+
+    for (
+      let i = 0;
+      i < Math.min(vornameArray.length, nachnameArray.length);
+      i++
+    ) {
+      const data = {
+        $vorname: vornameArray[i],
+        $nachname: nachnameArray[i],
+        $bier: updatedRows.bier,
+        $softdrinks: updatedRows.softdrinks,
+        $sonstige_kosten: Math.round(updatedRows.sonstige_kosten * 100) / 100,
+        $type: "Bearbeitet",
+      };
+      // Execute the insert query
+      const insertQuery = `INSERT INTO Historie (vorname, nachname, bier, softdrinks, sonstige_kosten, type)
+                           VALUES ($vorname, $nachname, $bier, $softdrinks, $sonstige_kosten, $type)
+                            `;
+      db.run(insertQuery, data, function (err) {
+        if (err) {
+          console.error("Error inserting row:", err.message);
+        } else {
+        }
+      });
+    }
+
+    // Execute the third statement after the second one completes
+    db.all("SELECT * FROM Spieler ORDER BY nachname", (err, rows) => {
+      if (err) {
+        console.error("Error:", err.message);
+      } else {
+        res.json(rows);
+      }
+    });
+  });
+});
+
+app.post("/api/spielerloeschen", verifyAdmin, (req, res) => {
   const updatedRow = req.body;
 
   db.serialize(() => {
@@ -159,7 +263,7 @@ app.post("/api/spielerloeschen", verifyToken, (req, res) => {
   });
 });
 
-app.post("/api/abrechnen", verifyToken, (req, res) => {
+app.post("/api/abrechnen", verifyAdmin, (req, res) => {
   const updatedRows = req.body;
   const vornameArray = req.body.vornamen;
   const nachnameArray = req.body.nachnamen;
@@ -209,7 +313,7 @@ app.post("/api/abrechnen", verifyToken, (req, res) => {
   });
 });
 
-app.post("/api/neuer_spieler", verifyToken, (req, res) => {
+app.post("/api/neuer_spieler", verifyAdmin, (req, res) => {
   const updatedRow = req.body;
 
   db.serialize(() => {
@@ -231,7 +335,7 @@ app.post("/api/neuer_spieler", verifyToken, (req, res) => {
 });
 
 // Route zum Abrufen der Spielerdaten aus der Datenbank
-app.get("/api/table", verifyToken, (req, res) => {
+app.get("/api/table", verifySpieler, (req, res) => {
   const query = "SELECT * FROM Spieler ORDER BY nachname ASC";
   db.all(query, (err, rows) => {
     if (err) {
@@ -247,7 +351,7 @@ app.get("/api/table", verifyToken, (req, res) => {
 });
 
 // Route zum Abrufen der Historiendaten aus der Datenbank
-app.get("/api/history", verifyToken, (req, res) => {
+app.get("/api/history", verifyModerator, (req, res) => {
   const query = "SELECT * FROM Historie ORDER BY timestamp DESC";
 
   db.all(query, (err, rows) => {

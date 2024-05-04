@@ -102,7 +102,7 @@ const historyColumns: TableColumnsType<DataType> = [
   },
 ];
 
-function Admin() {
+function Moderator() {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
   const signOut = useSignOut();
@@ -170,7 +170,7 @@ function Admin() {
     if (updatedRow) {
       try {
         axios
-          .post("http://" + serverIP + ":3000/api/anwenden_admin", updatedRow, {
+          .post("http://" + serverIP + ":3000/api/anwenden_mod", updatedRow, {
             headers: {
               Authorization: authHeader,
             },
@@ -408,40 +408,6 @@ function Admin() {
             />
           </div>
         </Modal>
-
-        <Button
-          onClick={() => setisdeleteUserOpen(true)}
-          disabled={selectedRows === undefined || selectedRows.length != 1}
-          style={{
-            backgroundColor: "#d43737",
-            borderColor: "#d43737",
-            color: "white",
-            marginRight: "20px",
-          }}
-        >
-          Spieler löschen
-        </Button>
-        <Modal
-          title="Spieler löschen"
-          open={isdeleteUserOpen}
-          onOk={() => {
-            if (selectedRows) {
-              onSpielerLoeschen(authHeader, { key: selectedRows[0].key });
-              setisdeleteUserOpen(false);
-            }
-          }}
-          onCancel={() => setisdeleteUserOpen(false)}
-          okText="Ja"
-          cancelText="Nein"
-        >
-          Sicher, dass{" "}
-          {selectedRows && selectedRows.length == 1
-            ? selectedRows[0].vorname + " " + selectedRows[0].nachname
-            : "der Spieler"}{" "}
-          gelöscht werden soll?
-        </Modal>
-      </div>
-      <div style={{ marginTop: "15px" }}>
         <Button
           onClick={() => {
             onHistory(authHeader);
@@ -475,6 +441,7 @@ function Admin() {
           />
         </Modal>
       </div>
+
       <Divider orientation="left" style={{ borderColor: "grey" }}></Divider>
       <div style={{ marginBottom: "30px" }}></div>
 
@@ -514,7 +481,7 @@ function Admin() {
                   color: "white",
                   marginRight: "20px",
                 }}
-                disabled={selectedRows === undefined || selectedRows.length < 1}
+                disabled={selectedRows === undefined || selectedRows.length < 1 || bierCnt <= 0}
               >
                 -
               </Button>
@@ -557,7 +524,7 @@ function Admin() {
                 onClick={() => {
                   setSoftDrinkCnt(softDrinkCnt - 1);
                 }}
-                disabled={selectedRows === undefined || selectedRows.length < 1}
+                disabled={selectedRows === undefined || selectedRows.length < 1 || softDrinkCnt <= 0}
                 style={{
                   backgroundColor: "#4285f4",
                   borderColor: "#4285f4",
@@ -608,38 +575,6 @@ function Admin() {
           <Row justify="end">
             <Col style={{ textAlign: "right" }}>
               <Button
-                onClick={() => setIsModalOpen(true)}
-                disabled={selectedRows === undefined || selectedRows.length < 1}
-                style={{
-                  backgroundColor: "#d43737",
-                  borderColor: "#d43737",
-                  color: "white",
-                  marginRight: "20px",
-                }}
-              >
-                Alles abrechnen
-              </Button>
-              <Modal
-                title="Alles Abrechnen"
-                open={isModalOpen}
-                onOk={() => {
-                  if (selectedRows && selectedRows.length > 0) {
-                    onAllesAbrechnen(authHeader, {
-                      keys: selectedRows.map((row) => row.key),
-                      vornamen: selectedRows.map((row) => row.vorname),
-                      nachnamen: selectedRows.map((row) => row.nachname),
-                    });
-                    setIsModalOpen(false);
-                  }
-                }}
-                onCancel={() => setIsModalOpen(false)}
-                okText="Ja"
-                cancelText="Nein"
-              >
-                Sicher, dass alles bezahlt wurde?
-              </Modal>
-              <div style={{ marginTop: 10 }} />
-              <Button
                 disabled={selectedRows === undefined || selectedRows.length < 1}
                 onClick={async () => {
                   if (selectedRows && !isNaN(Number(sonstigesEntry))) {
@@ -652,13 +587,24 @@ function Admin() {
                       sonstige_kosten: Number(sonstigesEntry),
                     };
                     await onAnwenden(authHeader, updatedRow);
-                    messageApi.open({
-                      type: "success",
-                      content: "Erfolgreich eingetragen!",
-                      style: {
-                        paddingTop: 120,
-                      },
-                    });
+                    if (Number(sonstigesEntry) >= 0) {
+                        messageApi.open({
+                            type: "success",
+                            content: "Erfolgreich eingetragen!",
+                            style: {
+                              paddingTop: 120,
+                            },
+                          });
+                    } else {
+                        messageApi.open({
+                            type: "error",
+                            content: "Keine negativen Beträge erlaubt!",
+                            style: {
+                              paddingTop: 120,
+                            },
+                          });
+                    }
+                    
                   } else {
                   }
                   setBierCnt(0);
@@ -682,4 +628,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default Moderator;
