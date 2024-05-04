@@ -1,7 +1,7 @@
 import useSignOut from "react-auth-kit/hooks/useSignOut";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Table, Card } from "antd";
+import { Table, Card, Switch } from "antd";
 import type { TableColumnsType } from "antd";
 import { Button } from "antd";
 import axios from "axios";
@@ -121,6 +121,7 @@ function Admin() {
   const [VornameLoeschen, VachnameLoeschen] = useState("");
   const [neuerVorname, setNeuerVorname] = useState("");
   const [neuerNachname, setNeuerNachname] = useState("");
+  const [isBeitragsPflichtig, setBeitragsPflichtig] = useState(true);
   const [messageApi, contextHolder] = message.useMessage();
 
   const rowSelection = {
@@ -191,14 +192,19 @@ function Admin() {
   function neuerSpieler(
     authHeader: any,
     neuerVorname: string,
-    neuerNachname: string
+    neuerNachname: string,
+    beitragspflichtig: boolean
   ) {
     if (neuerVorname && neuerNachname) {
       try {
         axios
           .post(
             "http://" + serverIP + ":3000/api/neuer_spieler",
-            { neuerVorname: neuerVorname, neuerNachname: neuerNachname },
+            {
+              neuerVorname: neuerVorname,
+              neuerNachname: neuerNachname,
+              beitragspflichtig: beitragspflichtig,
+            },
             {
               headers: {
                 Authorization: authHeader,
@@ -229,7 +235,6 @@ function Admin() {
             if (res.status === 200) {
               // Seite aktualisieren
               setTableData(res.data);
-              setCreateUserOpen(false);
             }
           })
           .catch((error) => {
@@ -358,11 +363,20 @@ function Admin() {
           onOk={() => {
             // api request senden
             if (neuerVorname.length > 1 && neuerNachname.length > 1) {
-              neuerSpieler(authHeader, neuerVorname, neuerNachname);
+              neuerSpieler(
+                authHeader,
+                neuerVorname,
+                neuerNachname,
+                isBeitragsPflichtig
+              );
               setCreateUserOpen(false);
+              setBeitragsPflichtig(true);
             }
           }}
-          onCancel={() => setCreateUserOpen(false)}
+          onCancel={() => {
+            setCreateUserOpen(false);
+            setBeitragsPflichtig(true);
+          }}
           okText="Erstellen"
           cancelText="Abbrechen"
         >
@@ -382,6 +396,17 @@ function Admin() {
               setNeuerNachname(e.target.value);
             }}
           />
+          <div style={{ marginTop: 15 }} />
+          <div>
+            <span style={{ marginRight: 20 }}>Beitragspflichtig</span>
+            <Switch
+              // defaultChecked={isBeitragsPflichtig}
+              checked={isBeitragsPflichtig}
+              onChange={(checked: boolean) => {
+                setBeitragsPflichtig(checked);
+              }}
+            />
+          </div>
         </Modal>
 
         <Button

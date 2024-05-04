@@ -123,7 +123,7 @@ app.post("/api/anwenden", verifyToken, (req, res) => {
     }
 
     // Execute the third statement after the second one completes
-    db.all("SELECT * FROM Spieler", (err, rows) => {
+    db.all("SELECT * FROM Spieler ORDER BY nachname", (err, rows) => {
       if (err) {
         console.error("Error:", err.message);
       } else {
@@ -142,7 +142,7 @@ app.post("/api/spielerloeschen", verifyToken, (req, res) => {
     WHERE key = ${updatedRow.key}`);
 
     // Execute the third statement after the second one completes
-    db.all("SELECT * FROM Spieler", (err, rows) => {
+    db.all("SELECT * FROM Spieler ORDER BY nachname", (err, rows) => {
       if (err) {
         console.error("Error:", err.message);
       } else {
@@ -163,6 +163,7 @@ app.post("/api/abrechnen", verifyToken, (req, res) => {
     SET bier = 0,
         softdrinks = 0,
         sonstige_kosten = 0,
+        monatsbeitrag = 0,
         gesamtkosten = 0
     WHERE key IN (${updatedRows.keys})`);
 
@@ -191,7 +192,7 @@ app.post("/api/abrechnen", verifyToken, (req, res) => {
       });
     }
 
-    db.all("SELECT * FROM Spieler", (err, rows) => {
+    db.all("SELECT * FROM Spieler ORDER BY nachname", (err, rows) => {
       if (err) {
         console.error("Error:", err.message);
       } else {
@@ -207,12 +208,12 @@ app.post("/api/neuer_spieler", verifyToken, (req, res) => {
   db.serialize(() => {
     // Execute the first statement
     db.run(
-      `INSERT INTO Spieler(vorname, nachname, bier, softdrinks, monatsbeitrag, sonstige_kosten, gesamtkosten) VALUES(?, ?, ?, ?, ?, ?, ?);`,
-      [updatedRow.neuerVorname, updatedRow.neuerNachname, 0, 0, 0, 0, 0]
+      `INSERT INTO Spieler(vorname, nachname, bier, softdrinks, monatsbeitrag, sonstige_kosten, gesamtkosten, beitragspflichtig) VALUES(?, ?, ?, ?, ?, ?, ?, ?);`,
+      [updatedRow.neuerVorname, updatedRow.neuerNachname, 0, 0, 0, 0, 0, req.body.beitragspflichtig]
     );
 
     // Execute the third statement after the second one completes
-    db.all("SELECT * FROM Spieler", (err, rows) => {
+    db.all("SELECT * FROM Spieler ORDER BY nachname", (err, rows) => {
       if (err) {
         console.error("Error:", err.message);
       } else {
@@ -224,8 +225,7 @@ app.post("/api/neuer_spieler", verifyToken, (req, res) => {
 
 // Route zum Abrufen der Spielerdaten aus der Datenbank
 app.get("/api/table", verifyToken, (req, res) => {
-  const query = "SELECT * FROM Spieler";
-
+  const query = "SELECT * FROM Spieler ORDER BY nachname ASC";
   db.all(query, (err, rows) => {
     if (err) {
       console.error(
