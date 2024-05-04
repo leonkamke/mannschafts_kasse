@@ -85,11 +85,11 @@ app.post("/api/anwenden", verifyToken, (req, res) => {
   const nachnameArray = req.body.nachnamen;
 
   db.serialize(() => {
-    // Execute the first statement
+    
     db.run(`UPDATE Spieler
     SET bier = bier + ${updatedRows.bier},
         softdrinks = softdrinks + ${updatedRows.softdrinks},
-        sonstige_kosten = sonstige_kosten + ${Math.round(updatedRows.sonstige_kosten * 100) / 100}
+        sonstige_kosten = ROUND(sonstige_kosten + ${updatedRows.sonstige_kosten}, 2)
     WHERE key IN (${updatedRows.keys})`);
 
     // Execute the second statement after the first one completes
