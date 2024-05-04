@@ -1,5 +1,4 @@
 import "../App.css";
-import { Stack } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useState } from "react";
@@ -94,7 +93,7 @@ function Root() {
         >
           <h1 style={{ color: "white" }}>SG Alftal</h1>
           <div style={{ marginBottom: "15px" }} />
-          <Stack>
+          <div>
             <Input
               placeholder="Username"
               size="large"
@@ -123,7 +122,7 @@ function Root() {
               Login
             </Button>
             {errorMessage && <p style={{ color: "#ff6669" }}>{errorMessage}</p>}
-          </Stack>
+          </div>
         </div>
       </div>
     </>

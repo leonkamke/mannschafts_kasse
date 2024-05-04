@@ -5,7 +5,7 @@ const sqlite3 = require("sqlite3").verbose();
 
 const app = express();
 const PORT = 3000;
-const secretKey = "fs8dgf67bdf98sfag"; // Secret Key
+const secretKey = "fs8dgf67bdf98sfag";
 
 app.use(bodyParser.json());
 var cors = require("cors");
@@ -21,14 +21,12 @@ function verifySpieler(req, res, next) {
 
   if (typeof bearerHeader !== "undefined") {
     const bearerToken = bearerHeader.split(" ")[1];
-    console.log(bearerToken);
 
     req.token = bearerToken;
     jwt.verify(req.token, secretKey, (err, authData) => {
       if (err) {
         res.sendStatus(403); // Forbidden
       } else {
-        console.log(authData);
         req.authData = authData;
         next();
       }
@@ -43,14 +41,12 @@ function verifyModerator(req, res, next) {
 
   if (typeof bearerHeader !== "undefined") {
     const bearerToken = bearerHeader.split(" ")[1];
-    console.log(bearerToken);
 
     req.token = bearerToken;
     jwt.verify(req.token, secretKey, (err, authData) => {
       if (err || !(authData.role === "moderator" || authData.role === "admin")) {
         res.sendStatus(403); // Forbidden
       } else {
-        console.log(authData);
         req.authData = authData;
         next();      
       }
@@ -65,14 +61,12 @@ function verifyAdmin(req, res, next) {
 
   if (typeof bearerHeader !== "undefined") {
     const bearerToken = bearerHeader.split(" ")[1];
-    console.log(bearerToken);
 
     req.token = bearerToken;
     jwt.verify(req.token, secretKey, (err, authData) => {
       if (err || authData.role !== "admin") {
         res.sendStatus(403); // Forbidden
       } else {
-        console.log(authData);
         req.authData = authData;
         next();      
       }
