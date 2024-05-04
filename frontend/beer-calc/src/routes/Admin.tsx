@@ -15,7 +15,6 @@ import {
   Card,
   Switch,
   Button,
-  Typography
 } from "antd";
 
 interface DataType {
