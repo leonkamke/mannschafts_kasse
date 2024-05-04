@@ -407,7 +407,7 @@ function Moderator() {
             Bier
           </Divider>
           <Row gutter={10}>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row" style={{marginRight: 57}}>
               <Input
                 disabled={selectedRows === undefined || selectedRows.length < 1}
                 placeholder="Bier"
@@ -419,7 +419,7 @@ function Moderator() {
               />
             </Col>
 
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row">
               <Button
                 onClick={() => {
                   setBierCnt(bierCnt - 1);
@@ -429,6 +429,7 @@ function Moderator() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
+                  width: 43
                 }}
                 disabled={
                   selectedRows === undefined ||
@@ -439,7 +440,7 @@ function Moderator() {
                 -
               </Button>
             </Col>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row">
               <Button
                 onClick={() => {
                   setBierCnt(bierCnt + 1);
@@ -449,6 +450,7 @@ function Moderator() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
+                  width: 43
                 }}
                 disabled={selectedRows === undefined || selectedRows.length < 1}
               >
@@ -460,7 +462,7 @@ function Moderator() {
             Softdrinks
           </Divider>
           <Row gutter={10}>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row" style={{marginRight: 57}}>
               <Input
                 disabled={selectedRows === undefined || selectedRows.length < 1}
                 value={softDrinkCnt}
@@ -471,7 +473,7 @@ function Moderator() {
                 }}
               />
             </Col>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row">
               <Button
                 onClick={() => {
                   setSoftDrinkCnt(softDrinkCnt - 1);
@@ -486,12 +488,13 @@ function Moderator() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
+                  width: 43
                 }}
               >
                 -
               </Button>
             </Col>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row">
               <Button
                 disabled={selectedRows === undefined || selectedRows.length < 1}
                 onClick={() => {
@@ -502,6 +505,7 @@ function Moderator() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
+                  width: 43
                 }}
               >
                 +
@@ -512,7 +516,7 @@ function Moderator() {
             Sonstige Kosten
           </Divider>
           <Row gutter={10}>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row">
               <Input
                 disabled={selectedRows === undefined || selectedRows.length < 1}
                 placeholder="Sonst. Kosten"

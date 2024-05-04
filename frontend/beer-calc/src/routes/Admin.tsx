@@ -490,20 +490,19 @@ function Admin() {
             Bier
           </Divider>
           <Row gutter={10}>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row" style={{ marginRight: 57 }}>
               <Input
                 disabled={selectedRows === undefined || selectedRows.length < 1}
                 placeholder="Bier"
                 value={bierCnt}
                 size="middle"
-                onChange={(e) => {}}
                 style={{
                   width: 50,
                 }}
               />
             </Col>
 
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row">
               <Button
                 onClick={() => {
                   setBierCnt(bierCnt - 1);
@@ -513,13 +512,14 @@ function Admin() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
+                  width: 43,
                 }}
                 disabled={selectedRows === undefined || selectedRows.length < 1}
               >
                 -
               </Button>
             </Col>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row">
               <Button
                 onClick={() => {
                   setBierCnt(bierCnt + 1);
@@ -529,6 +529,7 @@ function Admin() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
+                  width: 43,
                 }}
                 disabled={selectedRows === undefined || selectedRows.length < 1}
               >
@@ -540,19 +541,18 @@ function Admin() {
             Softdrinks
           </Divider>
           <Row gutter={10}>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row" style={{ marginRight: 57 }}>
               <Input
                 disabled={selectedRows === undefined || selectedRows.length < 1}
                 value={softDrinkCnt}
                 placeholder="Softdrinks"
                 size="middle"
-                onChange={(e) => {}}
                 style={{
                   width: 50,
                 }}
               />
             </Col>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row">
               <Button
                 onClick={() => {
                   setSoftDrinkCnt(softDrinkCnt - 1);
@@ -563,14 +563,15 @@ function Admin() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
+                  width: 43,
                 }}
               >
                 -
               </Button>
             </Col>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row">
               <Button
-                disabled={selectedRows === undefined || selectedRows.length < 1}
+                disabled={selectedRows === undefined}
                 onClick={() => {
                   setSoftDrinkCnt(softDrinkCnt + 1);
                 }}
@@ -579,6 +580,7 @@ function Admin() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
+                  width: 43,
                 }}
               >
                 +
@@ -589,7 +591,7 @@ function Admin() {
             Sonstige Kosten
           </Divider>
           <Row gutter={10}>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row">
               <Input
                 disabled={selectedRows === undefined || selectedRows.length < 1}
                 placeholder="Sonst. Kosten"
@@ -638,7 +640,7 @@ function Admin() {
               >
                 Sicher, dass alles bezahlt wurde?
               </Modal>
-              <div style={{ marginTop: 10 }} />
+              <div style={{ marginTop: 20 }} />
               <Button
                 disabled={selectedRows === undefined || selectedRows.length < 1}
                 onClick={async () => {
