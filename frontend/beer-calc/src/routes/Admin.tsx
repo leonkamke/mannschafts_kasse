@@ -64,7 +64,7 @@ function Admin() {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
   const signOut = useSignOut();
-  const [selectedRow, setSelectedRow] = useState<DataType | undefined>(
+  const [selectedRows, setSelectedRows] = useState<DataType[] | undefined>(
     undefined
   );
   const [tableData, setTableData] = useState<DataType[]>([]);
@@ -86,8 +86,7 @@ function Admin() {
       setBierCnt(0);
       setSoftDrinkCnt(0);
       setSonstigesEntry("");
-      const selectedRow: DataType = selectedRows[0];
-      setSelectedRow(selectedRow);
+      setSelectedRows(selectedRows);
     },
   };
 
@@ -158,11 +157,11 @@ function Admin() {
     return undefined;
   }
 
-  function onAllesAbrechnen(authHeader: any, updatedRow: any) {
-    if (updatedRow) {
+  function onAllesAbrechnen(authHeader: any, updatedRows: any) {
+    if (updatedRows) {
       try {
         axios
-          .post("http://" + serverIP + ":3000/api/abrechnen", updatedRow, {
+          .post("http://" + serverIP + ":3000/api/abrechnen", updatedRows, {
             headers: {
               Authorization: authHeader,
             },
@@ -250,7 +249,6 @@ function Admin() {
       >
         <Table
           rowSelection={{
-            type: "radio",
             ...rowSelection,
           }}
           style={{
@@ -321,7 +319,7 @@ function Admin() {
 
         <Button
           onClick={() => setisdeleteUserOpen(true)}
-          disabled={selectedRow === undefined}
+          disabled={selectedRows === undefined || selectedRows.length != 1}
           style={{
             backgroundColor: "#d43737",
             borderColor: "#d43737",
@@ -335,8 +333,8 @@ function Admin() {
           title="Spieler löschen"
           open={isdeleteUserOpen}
           onOk={() => {
-            if (selectedRow) {
-              onSpielerLoeschen(authHeader, { key: selectedRow.key });
+            if (selectedRows) {
+              onSpielerLoeschen(authHeader, { key: selectedRows[0].key });
               setisdeleteUserOpen(false);
             }
           }}
@@ -344,8 +342,7 @@ function Admin() {
           okText="Ja"
           cancelText="Nein"
         >
-          Sicher, dass {selectedRow?.vorname} {selectedRow?.nachname}{" "}
-          gelöscht werden soll?
+          Sicher, dass der Spieler gelöscht werden soll?
         </Modal>
 
       </div>
@@ -359,16 +356,14 @@ function Admin() {
           bordered={true}
           style={{ width: "100%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)", }}
         >
-          <h2>{selectedRow?.vorname
-              ? selectedRow?.vorname + " " + selectedRow?.nachname
-              : "Edit Row"}</h2>
+          <h2>{"Edit Row"}</h2>
           <Divider orientation="left" style={{ borderColor: "grey" }}>
             Bier
           </Divider>
           <Row gutter={10}>
             <Col className="gutter-row" span={6}>
               <Input
-                disabled={selectedRow === undefined}
+                disabled={selectedRows === undefined || selectedRows.length < 1}
                 placeholder="Bier"
                 value={bierCnt}
                 size="middle"
@@ -390,7 +385,7 @@ function Admin() {
                   color: "white",
                   marginRight: "20px",
                 }}
-                disabled={selectedRow === undefined}
+                disabled={selectedRows === undefined || selectedRows.length < 1}
               >
                 -
               </Button>
@@ -406,7 +401,7 @@ function Admin() {
                   color: "white",
                   marginRight: "20px",
                 }}
-                disabled={selectedRow === undefined}
+                disabled={selectedRows === undefined || selectedRows.length < 1}
               >
                 +
               </Button>
@@ -418,7 +413,7 @@ function Admin() {
           <Row gutter={10}>
             <Col className="gutter-row" span={6}>
               <Input
-                disabled={selectedRow === undefined}
+                disabled={selectedRows === undefined || selectedRows.length < 1}
                 value={softDrinkCnt}
                 placeholder="Softdrinks"
                 size="middle"
@@ -433,7 +428,7 @@ function Admin() {
                 onClick={() => {
                   setSoftDrinkCnt(softDrinkCnt - 1);
                 }}
-                disabled={selectedRow === undefined}
+                disabled={selectedRows === undefined || selectedRows.length < 1}
                 style={{
                   backgroundColor: "#4285f4",
                   borderColor: "#4285f4",
@@ -446,7 +441,7 @@ function Admin() {
             </Col>
             <Col className="gutter-row" span={6}>
               <Button
-                disabled={selectedRow === undefined}
+                disabled={selectedRows === undefined || selectedRows.length < 1}
                 onClick={() => {
                   setSoftDrinkCnt(softDrinkCnt + 1);
                 }}
@@ -467,7 +462,7 @@ function Admin() {
           <Row gutter={10}>
             <Col className="gutter-row" span={6}>
               <Input
-                disabled={selectedRow === undefined}
+                disabled={selectedRows === undefined || selectedRows.length < 1}
                 placeholder="Sonst. Kosten"
                 size="middle"
                 value={sonstigesEntry}
@@ -485,7 +480,7 @@ function Admin() {
             <Col style={{ textAlign: "right" }}>
               <Button
                 onClick={() => setIsModalOpen(true)}
-                disabled={selectedRow === undefined}
+                disabled={selectedRows === undefined || selectedRows.length < 1}
                 style={{
                   backgroundColor: "#d43737",
                   borderColor: "#d43737",
@@ -499,8 +494,8 @@ function Admin() {
                 title="Alles Abrechnen"
                 open={isModalOpen}
                 onOk={() => {
-                  if (selectedRow) {
-                    onAllesAbrechnen(authHeader, { key: selectedRow.key });
+                  if (selectedRows && selectedRows.length > 0) {
+                    onAllesAbrechnen(authHeader, { keys: selectedRows.map(row => row.key) });
                     setIsModalOpen(false);
                   }
                 }}
@@ -508,16 +503,15 @@ function Admin() {
                 okText="Ja"
                 cancelText="Nein"
               >
-                Sicher, dass {selectedRow?.vorname} {selectedRow?.nachname}{" "}
-                alles bezahlt hat?
+                Sicher, dass alles bezahlt wurde?
               </Modal>
               <div style={{ marginTop: 10 }} />
               <Button
-                disabled={selectedRow === undefined}
+                disabled={selectedRows === undefined || selectedRows.length < 1}
                 onClick={async () => {
-                  if (selectedRow && !isNaN(Number(sonstigesEntry))) {
+                  if (selectedRows && !isNaN(Number(sonstigesEntry))) {
                     const updatedRow = {
-                      key: selectedRow.key,
+                      keys: selectedRows.map(row => row.key),
                       bier: bierCnt,
                       softdrinks: softDrinkCnt,
                       sonstige_kosten: Number(sonstigesEntry),

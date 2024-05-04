@@ -80,15 +80,15 @@ app.post("/api/login", (req, res) => {
 });
 
 app.post("/api/anwenden", verifyToken, (req, res) => {
-  const updatedRow = req.body;
+  const updatedRows = req.body;
 
   db.serialize(() => {
     // Execute the first statement
     db.run(`UPDATE Spieler
-    SET bier = bier + ${updatedRow.bier},
-        softdrinks = softdrinks + ${updatedRow.softdrinks},
-        sonstige_kosten = sonstige_kosten + ${updatedRow.sonstige_kosten}
-    WHERE key = ${updatedRow.key}`);
+    SET bier = bier + ${updatedRows.bier},
+        softdrinks = softdrinks + ${updatedRows.softdrinks},
+        sonstige_kosten = sonstige_kosten + ${updatedRows.sonstige_kosten}
+    WHERE key IN (${updatedRows.keys})`);
 
     // Execute the second statement after the first one completes
     db.run(
@@ -126,7 +126,7 @@ app.post("/api/spielerloeschen", verifyToken, (req, res) => {
 });
 
 app.post("/api/abrechnen", verifyToken, (req, res) => {
-  const updatedRow = req.body;
+  const updatedRows = req.body;
 
   db.serialize(() => {
     // Execute the first statement
@@ -135,7 +135,7 @@ app.post("/api/abrechnen", verifyToken, (req, res) => {
         softdrinks = 0,
         sonstige_kosten = 0,
         gesamtkosten = 0
-    WHERE key = ${updatedRow.key}`);
+    WHERE key IN (${updatedRows.keys})`);
 
     // Execute the third statement after the second one completes
     db.all("SELECT * FROM Spieler", (err, rows) => {
