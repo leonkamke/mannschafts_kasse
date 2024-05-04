@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import AuthProvider from "react-auth-kit";
-import Root from "./routes/Root.tsx";
+import Login from "./routes/Login.tsx";
 import Admin from "./routes/Admin.tsx";
 import Spieler from "./routes/Spieler.tsx";
 import Moderator from "./routes/Moderator.tsx";
@@ -45,7 +45,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider store={store}>
         <BrowserRouter>
           <Routes>
-            <Route path={"/"} element={<Root />} />
+            <Route path={"/"} element={<Login />} />
             <Route element={<AuthOutlet fallbackPath="/" />}>
               <Route path="/Admin" element={<Admin />} />
               <Route path="/Spieler" element={<Spieler />} />

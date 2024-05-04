@@ -15,7 +15,7 @@ interface JWTPayload {
 
 const serverIP = "192.168.178.131"; //"192.168.178.160"
 
-function Root() {
+function Login() {
   const navigate = useNavigate();
   const signIn = useSignIn();
   const [usernameStr, setUsername] = useState("");
@@ -129,4 +129,4 @@ function Root() {
   );
 }
 
-export default Root;
+export default Login;

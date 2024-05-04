@@ -485,7 +485,7 @@ function Admin() {
           bordered={true}
           style={{ width: "100%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)" }}
         >
-          <h2>{"Editor"}</h2>
+          <h2>{"Bearbeiten"}</h2>
           <Divider orientation="left" style={{ borderColor: "grey" }}>
             Bier
           </Divider>
