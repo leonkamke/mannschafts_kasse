@@ -16,7 +16,7 @@ interface DataType {
   gesamtkosten: number;
 }
 
-const serverIP = "192.168.178.131"; //""192.168.178.160"
+const serverIP = "sg-alftal.mannschafskasse.de"; //"192.168.178.131";
 
 const columns: TableColumnsType<DataType> = [
   {
