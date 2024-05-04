@@ -89,12 +89,12 @@ app.post("/api/anwenden", verifyToken, (req, res) => {
     db.run(`UPDATE Spieler
     SET bier = bier + ${updatedRows.bier},
         softdrinks = softdrinks + ${updatedRows.softdrinks},
-        sonstige_kosten = sonstige_kosten + ${updatedRows.sonstige_kosten}
+        sonstige_kosten = sonstige_kosten + ${Math.round(updatedRows.sonstige_kosten * 100) / 100}
     WHERE key IN (${updatedRows.keys})`);
 
     // Execute the second statement after the first one completes
     db.run(
-      "UPDATE Spieler SET gesamtkosten = (bier * 1.5) + softdrinks + sonstige_kosten"
+      "UPDATE Spieler SET gesamtkosten = (bier * 1.5) + softdrinks + sonstige_kosten + monatsbeitrag"
     );
 
     for (
@@ -107,7 +107,7 @@ app.post("/api/anwenden", verifyToken, (req, res) => {
         $nachname: nachnameArray[i],
         $bier: updatedRows.bier,
         $softdrinks: updatedRows.softdrinks,
-        $sonstige_kosten: updatedRows.sonstige_kosten,
+        $sonstige_kosten: Math.round(updatedRows.sonstige_kosten * 100) / 100,
         $type: "Bearbeitet",
       };
       // Execute the insert query

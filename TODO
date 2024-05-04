@@ -1,10 +1,10 @@
-- Monatsbeitrag bei nur manchen Spielern monatlich addieren:
-    cron Job erstellen: 0 0 1 * * /path/to/sqlite3 /path/to/your/database.db "UPDATE Counter SET Value = Value + 1;"
-
-- Historie
-- Editor Account
 - In Datenbank immer auf 2 Nachkommastellen runden
-
+- Editor Account
 - Mannschafts-Logo als Hintergrund
 - Code cleaning
-- set time of database
+- Database should contain at most n rows
+
+
+Später:
+- Monatsbeitrag bei nur manchen Spielern monatlich addieren:
+    cron Job erstellen: 0 0 1 * * /path/to/sqlite3 /path/to/your/database.db "UPDATE Counter SET Value = Value + 1;"
