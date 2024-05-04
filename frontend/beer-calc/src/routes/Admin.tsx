@@ -133,10 +133,9 @@ function Admin() {
 
   const rowSelection = {
 
-    
+
     onChange: (rowKeys: any, selectedRows: DataType[]) => {
       // const rowKey = selectedRowKeys[0];
-      rowKeys = [];
       setBierCnt(0);
       setSoftDrinkCnt(0);
       setSonstigesEntry("");

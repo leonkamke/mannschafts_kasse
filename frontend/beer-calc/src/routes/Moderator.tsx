@@ -131,7 +131,6 @@ function Moderator() {
 
   const rowSelection = {
     onChange: (rowKeys: any, selectedRows: DataType[]) => {
-      rowKeys = [];
       setBierCnt(0);
       setSoftDrinkCnt(0);
       setSonstigesEntry("");
