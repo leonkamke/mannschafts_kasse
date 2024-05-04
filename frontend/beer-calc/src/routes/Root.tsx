@@ -6,8 +6,7 @@ import { useState } from "react";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
 import { useNavigate } from "react-router-dom";
 import { sha3_256 } from "js-sha3";
-import { Button } from "antd";
-import { Input } from "antd";
+import { Button, Input } from "antd";
 
 interface JWTPayload {
   id: number;
@@ -15,7 +14,7 @@ interface JWTPayload {
   role: string;
 }
 
-const serverIP = "localhost"; //"192.168.178.160"
+const serverIP = "192.168.178.131"; //"192.168.178.160"
 
 function Root() {
   const navigate = useNavigate();
@@ -55,7 +54,7 @@ function Root() {
               // Route to basic User page
               navigate("/Spieler", { replace: false });
             } else if (decodedToken.role === "moderator") {
-              navigate("/Moderator", {replace: false})
+              navigate("/Moderator", { replace: false });
             }
           } else {
             //Throw error

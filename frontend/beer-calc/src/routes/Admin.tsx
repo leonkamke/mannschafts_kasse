@@ -1,13 +1,21 @@
 import useSignOut from "react-auth-kit/hooks/useSignOut";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Table, Card, Switch } from "antd";
-import type { TableColumnsType } from "antd";
-import { Button } from "antd";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { Col, Divider, Row, ConfigProvider, Popconfirm, Modal } from "antd";
-import { Input, message } from "antd";
+import {
+  Col,
+  Divider,
+  Row,
+  Modal,
+  Input,
+  message,
+  TableColumnsType,
+  Table,
+  Card,
+  Switch,
+  Button,
+} from "antd";
 
 interface DataType {
   key: React.Key;
@@ -20,7 +28,7 @@ interface DataType {
   gesamtkosten: number;
 }
 
-const serverIP = "localhost"; //""192.168.178.160"
+const serverIP = "192.168.178.131"; //""192.168.178.160"
 
 const columns: TableColumnsType<DataType> = [
   {
@@ -118,7 +126,6 @@ function Admin() {
   const [isdeleteUserOpen, setisdeleteUserOpen] = useState(false);
   const [isCreateUserOpen, setCreateUserOpen] = useState(false);
   const [isHistoryOpen, setHistoryOpen] = useState(false);
-  const [VornameLoeschen, VachnameLoeschen] = useState("");
   const [neuerVorname, setNeuerVorname] = useState("");
   const [neuerNachname, setNeuerNachname] = useState("");
   const [isBeitragsPflichtig, setBeitragsPflichtig] = useState(true);
@@ -180,10 +187,7 @@ function Admin() {
               setTableData(res.data);
             }
           })
-          .catch((error) => {
-            // console.log("Error occurred:", error);
-            // setErrorMessage("Du hast verkackt, du Idiot!");
-          });
+          .catch((error) => {});
       } catch (error) {}
     }
     return undefined;
@@ -260,15 +264,11 @@ function Admin() {
           )
           .then((res) => {
             if (res.status === 200) {
-              // Seite aktualisieren
               setTableData(res.data);
               setCreateUserOpen(false);
             }
           })
-          .catch((error) => {
-            // console.log("Error occurred:", error);
-            // setErrorMessage("Du hast verkackt, du Idiot!");
-          });
+          .catch((error) => {});
       } catch (error) {}
     }
   }

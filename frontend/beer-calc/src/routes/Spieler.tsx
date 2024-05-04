@@ -1,12 +1,9 @@
 import useSignOut from "react-auth-kit/hooks/useSignOut";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Table } from "antd";
-import type { TableColumnsType } from "antd";
-import { Button } from "antd";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { Divider } from "antd";
+import { Divider, Button, TableColumnsType, Table } from "antd";
 
 interface DataType {
   key: React.Key;
@@ -19,7 +16,7 @@ interface DataType {
   gesamtkosten: number;
 }
 
-const serverIP = "localhost"; //""192.168.178.160"
+const serverIP = "192.168.178.131"; //""192.168.178.160"
 
 const columns: TableColumnsType<DataType> = [
   {

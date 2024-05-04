@@ -1,13 +1,21 @@
 import useSignOut from "react-auth-kit/hooks/useSignOut";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Table, Card, Switch } from "antd";
-import type { TableColumnsType } from "antd";
-import { Button } from "antd";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { Col, Divider, Row, ConfigProvider, Popconfirm, Modal } from "antd";
-import { Input, message } from "antd";
+import {
+  Col,
+  Divider,
+  Row,
+  Modal,
+  TableColumnsType,
+  Table,
+  Card,
+  Switch,
+  Input,
+  message,
+  Button,
+} from "antd";
 
 interface DataType {
   key: React.Key;
@@ -20,7 +28,7 @@ interface DataType {
   gesamtkosten: number;
 }
 
-const serverIP = "localhost"; //""192.168.178.160"
+const serverIP = "192.168.178.131"; //""192.168.178.160"
 
 const columns: TableColumnsType<DataType> = [
   {
@@ -114,11 +122,8 @@ function Moderator() {
   const [bierCnt, setBierCnt] = useState(0);
   const [softDrinkCnt, setSoftDrinkCnt] = useState(0);
   const [sonstigesEntry, setSonstigesEntry] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isdeleteUserOpen, setisdeleteUserOpen] = useState(false);
   const [isCreateUserOpen, setCreateUserOpen] = useState(false);
   const [isHistoryOpen, setHistoryOpen] = useState(false);
-  const [VornameLoeschen, VachnameLoeschen] = useState("");
   const [neuerVorname, setNeuerVorname] = useState("");
   const [neuerNachname, setNeuerNachname] = useState("");
   const [isBeitragsPflichtig, setBeitragsPflichtig] = useState(true);
@@ -126,7 +131,6 @@ function Moderator() {
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-      // const rowKey = selectedRowKeys[0];
       setBierCnt(0);
       setSoftDrinkCnt(0);
       setSonstigesEntry("");
@@ -180,10 +184,7 @@ function Moderator() {
               setTableData(res.data);
             }
           })
-          .catch((error) => {
-            // console.log("Error occurred:", error);
-            // setErrorMessage("Du hast verkackt, du Idiot!");
-          });
+          .catch((error) => {});
       } catch (error) {}
     }
     return undefined;
@@ -220,57 +221,6 @@ function Moderator() {
       } catch (error) {}
     }
     return undefined;
-  }
-
-  function onAllesAbrechnen(authHeader: any, updatedRows: any) {
-    if (updatedRows) {
-      try {
-        axios
-          .post("http://" + serverIP + ":3000/api/abrechnen", updatedRows, {
-            headers: {
-              Authorization: authHeader,
-            },
-          })
-          .then((res) => {
-            if (res.status === 200) {
-              // Seite aktualisieren
-              setTableData(res.data);
-            }
-          })
-          .catch((error) => {
-            // console.log("Error occurred:", error);
-            // setErrorMessage("Du hast verkackt, du Idiot!");
-          });
-      } catch (error) {}
-    }
-  }
-
-  function onSpielerLoeschen(authHeader: any, updatedRow: any) {
-    if (updatedRow) {
-      try {
-        axios
-          .post(
-            "http://" + serverIP + ":3000/api/spielerloeschen",
-            updatedRow,
-            {
-              headers: {
-                Authorization: authHeader,
-              },
-            }
-          )
-          .then((res) => {
-            if (res.status === 200) {
-              // Seite aktualisieren
-              setTableData(res.data);
-              setCreateUserOpen(false);
-            }
-          })
-          .catch((error) => {
-            // console.log("Error occurred:", error);
-            // setErrorMessage("Du hast verkackt, du Idiot!");
-          });
-      } catch (error) {}
-    }
   }
 
   const onSignOut = () => {
@@ -463,7 +413,6 @@ function Moderator() {
                 placeholder="Bier"
                 value={bierCnt}
                 size="middle"
-                onChange={(e) => {}}
                 style={{
                   width: 50,
                 }}
@@ -481,7 +430,11 @@ function Moderator() {
                   color: "white",
                   marginRight: "20px",
                 }}
-                disabled={selectedRows === undefined || selectedRows.length < 1 || bierCnt <= 0}
+                disabled={
+                  selectedRows === undefined ||
+                  selectedRows.length < 1 ||
+                  bierCnt <= 0
+                }
               >
                 -
               </Button>
@@ -513,7 +466,6 @@ function Moderator() {
                 value={softDrinkCnt}
                 placeholder="Softdrinks"
                 size="middle"
-                onChange={(e) => {}}
                 style={{
                   width: 50,
                 }}
@@ -524,7 +476,11 @@ function Moderator() {
                 onClick={() => {
                   setSoftDrinkCnt(softDrinkCnt - 1);
                 }}
-                disabled={selectedRows === undefined || selectedRows.length < 1 || softDrinkCnt <= 0}
+                disabled={
+                  selectedRows === undefined ||
+                  selectedRows.length < 1 ||
+                  softDrinkCnt <= 0
+                }
                 style={{
                   backgroundColor: "#4285f4",
                   borderColor: "#4285f4",
@@ -588,23 +544,22 @@ function Moderator() {
                     };
                     await onAnwenden(authHeader, updatedRow);
                     if (Number(sonstigesEntry) >= 0) {
-                        messageApi.open({
-                            type: "success",
-                            content: "Erfolgreich eingetragen!",
-                            style: {
-                              paddingTop: 120,
-                            },
-                          });
+                      messageApi.open({
+                        type: "success",
+                        content: "Erfolgreich eingetragen!",
+                        style: {
+                          paddingTop: 120,
+                        },
+                      });
                     } else {
-                        messageApi.open({
-                            type: "error",
-                            content: "Keine negativen Beträge erlaubt!",
-                            style: {
-                              paddingTop: 120,
-                            },
-                          });
+                      messageApi.open({
+                        type: "error",
+                        content: "Keine negativen Beträge erlaubt!",
+                        style: {
+                          paddingTop: 120,
+                        },
+                      });
                     }
-                    
                   } else {
                   }
                   setBierCnt(0);
