@@ -50,11 +50,9 @@ function Root() {
             const decodedToken: JWTPayload = jwtDecode(res.data.token);
             if (decodedToken.role === "admin") {
               // Route to Admin page
-              console.log("Admin");
               navigate("/Admin", { replace: false });
             } else if (decodedToken.role! === "basic") {
               // Route to basic User page
-              console.log("User");
               navigate("/User", { replace: false });
             }
           } else {

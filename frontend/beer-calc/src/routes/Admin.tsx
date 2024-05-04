@@ -47,19 +47,58 @@ const columns: TableColumnsType<DataType> = [
     title: "Monatsbeitrag",
     dataIndex: "monatsbeitrag",
     width: 150,
-    render: text => <span>{text} €</span>,
+    render: (text) => <span>{text} €</span>,
   },
   {
     title: "Sonstige Kosten",
     dataIndex: "sonstige_kosten",
     width: 120,
-    render: text => <span>{text} €</span>,
+    render: (text) => <span>{text} €</span>,
   },
   {
     title: "Gesamtkosten",
     dataIndex: "gesamtkosten",
     width: 130,
-    render: text => <span>{text} €</span>,
+    render: (text) => <span>{text} €</span>,
+  },
+];
+
+const historyColumns: TableColumnsType<DataType> = [
+  {
+    title: "Vorname",
+    dataIndex: "vorname",
+    width: 120, // Breite der Spalte in Pixeln
+  },
+  {
+    title: "Nachname",
+    dataIndex: "nachname",
+    width: 120,
+  },
+  {
+    title: "Typ",
+    dataIndex: "type",
+    width: 100,
+  },
+  {
+    title: "Bier",
+    dataIndex: "bier",
+    width: 70,
+  },
+  {
+    title: "Softdrinks",
+    dataIndex: "softdrinks",
+    width: 100,
+  },
+  {
+    title: "Sonstige Kosten",
+    dataIndex: "sonstige_kosten",
+    width: 120,
+    render: (text) => <span>{text} €</span>,
+  },
+  {
+    title: "Datum",
+    dataIndex: "timestamp",
+    width: 120,
   },
 ];
 
@@ -71,6 +110,7 @@ function Admin() {
     undefined
   );
   const [tableData, setTableData] = useState<DataType[]>([]);
+  const [historyData, setHistoryData] = useState<DataType[]>([]);
   const [bierCnt, setBierCnt] = useState(0);
   const [softDrinkCnt, setSoftDrinkCnt] = useState(0);
   const [sonstigesEntry, setSonstigesEntry] = useState("");
@@ -82,7 +122,6 @@ function Admin() {
   const [neuerVorname, setNeuerVorname] = useState("");
   const [neuerNachname, setNeuerNachname] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
-
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
@@ -110,6 +149,22 @@ function Admin() {
     }
   }, []);
 
+  function onHistory(authHeader: any) {
+    try {
+      axios
+        .get<DataType[]>("http://" + serverIP + ":3000/api/history", {
+          headers: {
+            Authorization: authHeader,
+          },
+        })
+        .then((res) => {
+          setHistoryData(res.data);
+        });
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  }
+
   function onAnwenden(authHeader: any, updatedRow: any) {
     if (updatedRow) {
       try {
@@ -128,7 +183,7 @@ function Admin() {
             // console.log("Error occurred:", error);
             // setErrorMessage("Du hast verkackt, du Idiot!");
           });
-      } catch (error) { }
+      } catch (error) {}
     }
     return undefined;
   }
@@ -155,8 +210,8 @@ function Admin() {
               setTableData(res.data);
             }
           })
-          .catch((error) => { });
-      } catch (error) { }
+          .catch((error) => {});
+      } catch (error) {}
     }
     return undefined;
   }
@@ -181,7 +236,7 @@ function Admin() {
             // console.log("Error occurred:", error);
             // setErrorMessage("Du hast verkackt, du Idiot!");
           });
-      } catch (error) { }
+      } catch (error) {}
     }
   }
 
@@ -189,11 +244,15 @@ function Admin() {
     if (updatedRow) {
       try {
         axios
-          .post("http://" + serverIP + ":3000/api/spielerloeschen", updatedRow, {
-            headers: {
-              Authorization: authHeader,
-            },
-          })
+          .post(
+            "http://" + serverIP + ":3000/api/spielerloeschen",
+            updatedRow,
+            {
+              headers: {
+                Authorization: authHeader,
+              },
+            }
+          )
           .then((res) => {
             if (res.status === 200) {
               // Seite aktualisieren
@@ -205,7 +264,7 @@ function Admin() {
             // console.log("Error occurred:", error);
             // setErrorMessage("Du hast verkackt, du Idiot!");
           });
-      } catch (error) { }
+      } catch (error) {}
     }
   }
 
@@ -226,7 +285,14 @@ function Admin() {
           alignItems: "center",
         }}
       >
-        <h1 style={{color: "lightgrey", margin: 0, textAlign: "center", flexGrow: 1 }}>
+        <h1
+          style={{
+            color: "lightgrey",
+            margin: 0,
+            textAlign: "center",
+            flexGrow: 1,
+          }}
+        >
           SG Alftal
         </h1>
         <Button
@@ -255,15 +321,14 @@ function Admin() {
           rowSelection={{
             ...rowSelection,
           }}
-          style={{
-          }}
+          style={{}}
           bordered={true}
           scroll={{ y: 400 }} // Set the height of the table to 400px
           columns={columns}
           dataSource={tableData}
           pagination={{
             pageSize: 999,
-            position: []
+            position: [],
           }}
         />
       </div>
@@ -308,7 +373,6 @@ function Admin() {
             onChange={(e) => {
               setNeuerVorname(e.target.value);
             }}
-            
           />
           <div style={{ marginTop: 15 }} />
           <Input
@@ -317,7 +381,6 @@ function Admin() {
             onChange={(e) => {
               setNeuerNachname(e.target.value);
             }}
-            
           />
         </Modal>
 
@@ -346,12 +409,17 @@ function Admin() {
           okText="Ja"
           cancelText="Nein"
         >
-          Sicher, dass {selectedRows && selectedRows.length == 1 ? selectedRows[0].vorname + " " + selectedRows[0].nachname : "der Spieler"} gelöscht werden soll?
+          Sicher, dass{" "}
+          {selectedRows && selectedRows.length == 1
+            ? selectedRows[0].vorname + " " + selectedRows[0].nachname
+            : "der Spieler"}{" "}
+          gelöscht werden soll?
         </Modal>
       </div>
-      <div style={{marginTop: "15px"}}>
-      <Button
+      <div style={{ marginTop: "15px" }}>
+        <Button
           onClick={() => {
+            onHistory(authHeader);
             setHistoryOpen(true);
           }}
           style={{
@@ -370,23 +438,15 @@ function Admin() {
           footer={null}
           width={2000}
         >
-          <div style={{ marginTop: 20 }} />
-          <Input
-            placeholder="Vorname"
-            size="large"
-            onChange={(e) => {
-              setNeuerVorname(e.target.value);
+          <Table
+            bordered={true}
+            scroll={{ y: 400 }} // Set the height of the table to 400px
+            columns={historyColumns}
+            dataSource={historyData}
+            pagination={{
+              pageSize: 999,
+              position: [],
             }}
-            
-          />
-          <div style={{ marginTop: 15 }} />
-          <Input
-            placeholder="Nachname"
-            size="large"
-            onChange={(e) => {
-              setNeuerNachname(e.target.value);
-            }}
-            
           />
         </Modal>
       </div>
@@ -398,7 +458,7 @@ function Admin() {
       >
         <Card
           bordered={true}
-          style={{ width: "100%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)", }}
+          style={{ width: "100%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)" }}
         >
           <h2>{"Editor"}</h2>
           <Divider orientation="left" style={{ borderColor: "grey" }}>
@@ -411,7 +471,7 @@ function Admin() {
                 placeholder="Bier"
                 value={bierCnt}
                 size="middle"
-                onChange={(e) => { }}
+                onChange={(e) => {}}
                 style={{
                   width: 50,
                 }}
@@ -461,7 +521,7 @@ function Admin() {
                 value={softDrinkCnt}
                 placeholder="Softdrinks"
                 size="middle"
-                onChange={(e) => { }}
+                onChange={(e) => {}}
                 style={{
                   width: 50,
                 }}
@@ -539,7 +599,11 @@ function Admin() {
                 open={isModalOpen}
                 onOk={() => {
                   if (selectedRows && selectedRows.length > 0) {
-                    onAllesAbrechnen(authHeader, { keys: selectedRows.map(row => row.key) });
+                    onAllesAbrechnen(authHeader, {
+                      keys: selectedRows.map((row) => row.key),
+                      vornamen: selectedRows.map((row) => row.vorname),
+                      nachnamen: selectedRows.map((row) => row.nachname),
+                    });
                     setIsModalOpen(false);
                   }
                 }}
@@ -555,18 +619,20 @@ function Admin() {
                 onClick={async () => {
                   if (selectedRows && !isNaN(Number(sonstigesEntry))) {
                     const updatedRow = {
-                      keys: selectedRows.map(row => row.key),
+                      keys: selectedRows.map((row) => row.key),
+                      vornamen: selectedRows.map((row) => row.vorname),
+                      nachnamen: selectedRows.map((row) => row.nachname),
                       bier: bierCnt,
                       softdrinks: softDrinkCnt,
                       sonstige_kosten: Number(sonstigesEntry),
                     };
                     await onAnwenden(authHeader, updatedRow);
                     messageApi.open({
-                      type: 'success',
-                      content: 'Erfolgreich eingetragen!',
+                      type: "success",
+                      content: "Erfolgreich eingetragen!",
                       style: {
-                        paddingTop: 120
-                      }
+                        paddingTop: 120,
+                      },
                     });
                   } else {
                   }

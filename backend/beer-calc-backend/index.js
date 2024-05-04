@@ -81,6 +81,8 @@ app.post("/api/login", (req, res) => {
 
 app.post("/api/anwenden", verifyToken, (req, res) => {
   const updatedRows = req.body;
+  const vornameArray = req.body.vornamen;
+  const nachnameArray = req.body.nachnamen;
 
   db.serialize(() => {
     // Execute the first statement
@@ -94,6 +96,31 @@ app.post("/api/anwenden", verifyToken, (req, res) => {
     db.run(
       "UPDATE Spieler SET gesamtkosten = (bier * 1.5) + softdrinks + sonstige_kosten"
     );
+
+    for (
+      let i = 0;
+      i < Math.min(vornameArray.length, nachnameArray.length);
+      i++
+    ) {
+      const data = {
+        $vorname: vornameArray[i],
+        $nachname: nachnameArray[i],
+        $bier: updatedRows.bier,
+        $softdrinks: updatedRows.softdrinks,
+        $sonstige_kosten: updatedRows.sonstige_kosten,
+        $type: "Bearbeitet",
+      };
+      // Execute the insert query
+      const insertQuery = `INSERT INTO Historie (vorname, nachname, bier, softdrinks, sonstige_kosten, type)
+                           VALUES ($vorname, $nachname, $bier, $softdrinks, $sonstige_kosten, $type)
+                            `;
+      db.run(insertQuery, data, function (err) {
+        if (err) {
+          console.error("Error inserting row:", err.message);
+        } else {
+        }
+      });
+    }
 
     // Execute the third statement after the second one completes
     db.all("SELECT * FROM Spieler", (err, rows) => {
@@ -127,6 +154,8 @@ app.post("/api/spielerloeschen", verifyToken, (req, res) => {
 
 app.post("/api/abrechnen", verifyToken, (req, res) => {
   const updatedRows = req.body;
+  const vornameArray = req.body.vornamen;
+  const nachnameArray = req.body.nachnamen;
 
   db.serialize(() => {
     // Execute the first statement
@@ -137,7 +166,31 @@ app.post("/api/abrechnen", verifyToken, (req, res) => {
         gesamtkosten = 0
     WHERE key IN (${updatedRows.keys})`);
 
-    // Execute the third statement after the second one completes
+    for (
+      let i = 0;
+      i < Math.min(vornameArray.length, nachnameArray.length);
+      i++
+    ) {
+      const data = {
+        $vorname: vornameArray[i],
+        $nachname: nachnameArray[i],
+        $bier: 0,
+        $softdrinks: 0,
+        $sonstige_kosten: 0.0,
+        $type: "Abgerechnet",
+      };
+      // Execute the insert query
+      const insertQuery = `INSERT INTO Historie (vorname, nachname, bier, softdrinks, sonstige_kosten, type)
+                           VALUES ($vorname, $nachname, $bier, $softdrinks, $sonstige_kosten, $type)
+                            `;
+      db.run(insertQuery, data, function (err) {
+        if (err) {
+          console.error("Error inserting row:", err.message);
+        } else {
+        }
+      });
+    }
+
     db.all("SELECT * FROM Spieler", (err, rows) => {
       if (err) {
         console.error("Error:", err.message);
@@ -150,10 +203,13 @@ app.post("/api/abrechnen", verifyToken, (req, res) => {
 
 app.post("/api/neuer_spieler", verifyToken, (req, res) => {
   const updatedRow = req.body;
-  
+
   db.serialize(() => {
     // Execute the first statement
-    db.run(`INSERT INTO Spieler(vorname, nachname, bier, softdrinks, monatsbeitrag, sonstige_kosten, gesamtkosten) VALUES(?, ?, ?, ?, ?, ?, ?);`, [updatedRow.neuerVorname, updatedRow.neuerNachname, 0, 0, 0, 0, 0]);
+    db.run(
+      `INSERT INTO Spieler(vorname, nachname, bier, softdrinks, monatsbeitrag, sonstige_kosten, gesamtkosten) VALUES(?, ?, ?, ?, ?, ?, ?);`,
+      [updatedRow.neuerVorname, updatedRow.neuerNachname, 0, 0, 0, 0, 0]
+    );
 
     // Execute the third statement after the second one completes
     db.all("SELECT * FROM Spieler", (err, rows) => {
@@ -174,6 +230,23 @@ app.get("/api/table", verifyToken, (req, res) => {
     if (err) {
       console.error(
         "Fehler beim Abrufen der Spielerdaten aus der Datenbank:",
+        err.message
+      );
+      res.status(500).json({ error: "Internal server error" });
+    } else {
+      res.json(rows);
+    }
+  });
+});
+
+// Route zum Abrufen der Historiendaten aus der Datenbank
+app.get("/api/history", verifyToken, (req, res) => {
+  const query = "SELECT * FROM Historie ORDER BY timestamp DESC";
+
+  db.all(query, (err, rows) => {
+    if (err) {
+      console.error(
+        "Fehler beim Abrufen der Historiendaten aus der Datenbank:",
         err.message
       );
       res.status(500).json({ error: "Internal server error" });
