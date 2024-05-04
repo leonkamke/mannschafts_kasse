@@ -77,6 +77,7 @@ function Admin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isdeleteUserOpen, setisdeleteUserOpen] = useState(false);
   const [isCreateUserOpen, setCreateUserOpen] = useState(false);
+  const [isHistoryOpen, setHistoryOpen] = useState(false);
   const [VornameLoeschen, VachnameLoeschen] = useState("");
   const [neuerVorname, setNeuerVorname] = useState("");
   const [neuerNachname, setNeuerNachname] = useState("");
@@ -347,7 +348,47 @@ function Admin() {
         >
           Sicher, dass {selectedRows && selectedRows.length == 1 ? selectedRows[0].vorname + " " + selectedRows[0].nachname : "der Spieler"} gelöscht werden soll?
         </Modal>
-
+      </div>
+      <div style={{marginTop: "15px"}}>
+      <Button
+          onClick={() => {
+            setHistoryOpen(true);
+          }}
+          style={{
+            backgroundColor: "#1d1d1d",
+            borderColor: "grey",
+            color: "white",
+            marginRight: "20px",
+          }}
+        >
+          Historie
+        </Button>
+        <Modal
+          title="Historie"
+          open={isHistoryOpen}
+          onCancel={() => setHistoryOpen(false)}
+          footer={null}
+          width={2000}
+        >
+          <div style={{ marginTop: 20 }} />
+          <Input
+            placeholder="Vorname"
+            size="large"
+            onChange={(e) => {
+              setNeuerVorname(e.target.value);
+            }}
+            
+          />
+          <div style={{ marginTop: 15 }} />
+          <Input
+            placeholder="Nachname"
+            size="large"
+            onChange={(e) => {
+              setNeuerNachname(e.target.value);
+            }}
+            
+          />
+        </Modal>
       </div>
       <Divider orientation="left" style={{ borderColor: "grey" }}></Divider>
       <div style={{ marginBottom: "30px" }}></div>
