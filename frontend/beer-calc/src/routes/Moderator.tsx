@@ -235,21 +235,23 @@ function Moderator() {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          paddingTop: "10px",
+          paddingTop: "7px",
+          paddingBottom: "9px",
           top: 0,
           alignItems: "center",
         }}
       >
-        <h1
+        <div
           style={{
-            color: "lightgrey",
+            fontSize: 30,
+            color: "white",
             margin: 0,
             textAlign: "center",
-            flexGrow: 1,
+            marginLeft: "20px",
           }}
         >
           SG Alftal
-        </h1>
+        </div>
         <Button
           onClick={onSignOut}
           style={{
@@ -262,14 +264,15 @@ function Moderator() {
           Logout
         </Button>
       </div>
-      <Divider orientation="left" style={{ borderColor: "grey" }}></Divider>
-      <div style={{ marginBottom: "30px" }}></div>
+      <div
+        style={{ marginBottom: "20px", borderTop: "0.5px solid lightgrey" }}
+      />
       <div
         style={{
           justifyContent: "center",
           display: "flex",
-          paddingLeft: 10,
-          paddingRight: 10,
+          paddingLeft: 5,
+          paddingRight: 5,
         }}
       >
         <Table
@@ -278,7 +281,7 @@ function Moderator() {
           }}
           style={{}}
           bordered={true}
-          scroll={{ y: 400 }} // Set the height of the table to 400px
+          scroll={{ y: 400 }}
           columns={columns}
           dataSource={tableData}
           pagination={{
@@ -407,7 +410,7 @@ function Moderator() {
             Bier
           </Divider>
           <Row gutter={10}>
-            <Col className="gutter-row" style={{marginRight: 57}}>
+            <Col className="gutter-row" style={{ marginRight: 57 }}>
               <Input
                 disabled={selectedRows === undefined || selectedRows.length < 1}
                 placeholder="Bier"
@@ -429,7 +432,7 @@ function Moderator() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
-                  width: 43
+                  width: 43,
                 }}
                 disabled={
                   selectedRows === undefined ||
@@ -450,7 +453,7 @@ function Moderator() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
-                  width: 43
+                  width: 43,
                 }}
                 disabled={selectedRows === undefined || selectedRows.length < 1}
               >
@@ -462,7 +465,7 @@ function Moderator() {
             Softdrinks
           </Divider>
           <Row gutter={10}>
-            <Col className="gutter-row" style={{marginRight: 57}}>
+            <Col className="gutter-row" style={{ marginRight: 57 }}>
               <Input
                 disabled={selectedRows === undefined || selectedRows.length < 1}
                 value={softDrinkCnt}
@@ -488,7 +491,7 @@ function Moderator() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
-                  width: 43
+                  width: 43,
                 }}
               >
                 -
@@ -505,7 +508,7 @@ function Moderator() {
                   borderColor: "#4285f4",
                   color: "white",
                   marginRight: "20px",
-                  width: 43
+                  width: 43,
                 }}
               >
                 +
