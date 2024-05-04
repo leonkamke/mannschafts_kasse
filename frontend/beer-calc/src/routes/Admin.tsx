@@ -47,16 +47,19 @@ const columns: TableColumnsType<DataType> = [
     title: "Monatsbeitrag",
     dataIndex: "monatsbeitrag",
     width: 150,
+    render: text => <span>{text} €</span>,
   },
   {
     title: "Sonstige Kosten",
     dataIndex: "sonstige_kosten",
     width: 120,
+    render: text => <span>{text} €</span>,
   },
   {
     title: "Gesamtkosten",
     dataIndex: "gesamtkosten",
     width: 130,
+    render: text => <span>{text} €</span>,
   },
 ];
 
