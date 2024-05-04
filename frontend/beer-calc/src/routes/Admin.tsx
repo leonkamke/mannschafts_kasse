@@ -295,6 +295,7 @@ function Admin() {
         <div
           style={{
             fontSize: 30,
+            fontWeight: "bold",
             color: "white",
             margin: 0,
             textAlign: "center",
@@ -400,7 +401,7 @@ function Admin() {
               setNeuerNachname(e.target.value);
             }}
           />
-          <div style={{ marginTop: 15 }} />
+          <div style={{ marginTop: 18 }} />
           <div>
             <span style={{ marginRight: 20 }}>Beitragspflichtig</span>
             <Switch
@@ -411,6 +412,7 @@ function Admin() {
               }}
             />
           </div>
+          <div style={{ marginTop: 23 }} />
         </Modal>
 
         <Button
