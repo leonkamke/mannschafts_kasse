@@ -132,8 +132,9 @@ function Admin() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+    onChange: (rowKeys: any, selectedRows: DataType[]) => {
       // const rowKey = selectedRowKeys[0];
+      rowKeys = [];
       setBierCnt(0);
       setSoftDrinkCnt(0);
       setSonstigesEntry("");
@@ -187,7 +188,7 @@ function Admin() {
               setTableData(res.data);
             }
           })
-          .catch((error) => {});
+          .catch(() => {});
       } catch (error) {}
     }
     return undefined;
@@ -220,7 +221,7 @@ function Admin() {
               setTableData(res.data);
             }
           })
-          .catch((error) => {});
+          .catch(() => {});
       } catch (error) {}
     }
     return undefined;
@@ -241,7 +242,7 @@ function Admin() {
               setTableData(res.data);
             }
           })
-          .catch((error) => {
+          .catch(() => {
             // console.log("Error occurred:", error);
             // setErrorMessage("Du hast verkackt, du Idiot!");
           });
@@ -268,7 +269,7 @@ function Admin() {
               setCreateUserOpen(false);
             }
           })
-          .catch((error) => {});
+          .catch(() => {});
       } catch (error) {}
     }
   }

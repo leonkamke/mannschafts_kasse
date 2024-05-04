@@ -61,7 +61,7 @@ function Login() {
         } else {
         }
       })
-      .catch((error) => {
+      .catch(() => {
         // console.log("Error occurred:", error);
         setErrorMessage("Du hast verkackt, du Idiot!");
       });

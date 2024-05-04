@@ -130,7 +130,8 @@ function Moderator() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+    onChange: (rowKeys: any, selectedRows: DataType[]) => {
+      rowKeys = [];
       setBierCnt(0);
       setSoftDrinkCnt(0);
       setSonstigesEntry("");
@@ -184,7 +185,7 @@ function Moderator() {
               setTableData(res.data);
             }
           })
-          .catch((error) => {});
+          .catch(() => {});
       } catch (error) {}
     }
     return undefined;
@@ -217,7 +218,7 @@ function Moderator() {
               setTableData(res.data);
             }
           })
-          .catch((error) => {});
+          .catch(() => {});
       } catch (error) {}
     }
     return undefined;
