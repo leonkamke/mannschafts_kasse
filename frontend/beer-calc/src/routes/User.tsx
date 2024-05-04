@@ -65,6 +65,12 @@ function User() {
   const signOut = useSignOut();
   const [tableData, setTableData] = useState<DataType[]>([]);
 
+
+  function formatAmount(amount) {
+    return `${amount.toFixed(2)} €`;
+  }
+  
+
   useEffect(() => {
     try {
       axios
@@ -74,7 +80,13 @@ function User() {
           },
         })
         .then((res) => {
-          setTableData(res.data);
+          const formattedData = res.data.map((item) => ({
+            ...item,
+            monatsbeitrag: formatAmount(item.monatsbeitrag),
+            sonstige_kosten: formatAmount(item.sonstige_kosten),
+            gesamtkosten: formatAmount(item.gesamtkosten),
+          }));
+          setTableData(formattedData);
         });
     } catch (error) {
       console.error("Failed to fetch data:", error);
