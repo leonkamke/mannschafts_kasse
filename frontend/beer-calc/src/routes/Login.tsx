@@ -13,7 +13,7 @@ interface JWTPayload {
   role: string;
 }
 
-const serverIP = "sg-alftal.mannschafskasse.de"; //"192.168.178.131";
+const serverIP = "mannschaftskasse.sg-alftal.de"; //"192.168.178.131";
 
 function Login() {
   const navigate = useNavigate();
