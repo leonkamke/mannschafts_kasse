@@ -6,7 +6,7 @@ import type { TableColumnsType } from "antd";
 import { Button } from "antd";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { Divider} from "antd";
+import { Divider } from "antd";
 
 interface DataType {
   key: React.Key;
@@ -46,30 +46,27 @@ const columns: TableColumnsType<DataType> = [
     title: "Monatsbeitrag",
     dataIndex: "monatsbeitrag",
     width: 150,
+    render: (text) => <span>{text} €</span>,
   },
   {
     title: "Sonstige Kosten",
     dataIndex: "sonstige_kosten",
     width: 120,
+    render: (text) => <span>{text} €</span>,
   },
   {
     title: "Gesamtkosten",
     dataIndex: "gesamtkosten",
     width: 130,
+    render: (text) => <span>{text} €</span>,
   },
 ];
 
-function User() {
+function Spieler() {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
   const signOut = useSignOut();
   const [tableData, setTableData] = useState<DataType[]>([]);
-
-
-  function formatAmount(amount) {
-    return `${amount.toFixed(2)} €`;
-  }
-  
 
   useEffect(() => {
     try {
@@ -80,13 +77,7 @@ function User() {
           },
         })
         .then((res) => {
-          const formattedData = res.data.map((item) => ({
-            ...item,
-            monatsbeitrag: formatAmount(item.monatsbeitrag),
-            sonstige_kosten: formatAmount(item.sonstige_kosten),
-            gesamtkosten: formatAmount(item.gesamtkosten),
-          }));
-          setTableData(formattedData);
+          setTableData(res.data);
         });
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -109,7 +100,14 @@ function User() {
           alignItems: "center",
         }}
       >
-        <h1 style={{color: "lightgrey", margin: 0, textAlign: "center", flexGrow: 1 }}>
+        <h1
+          style={{
+            color: "lightgrey",
+            margin: 0,
+            textAlign: "center",
+            flexGrow: 1,
+          }}
+        >
           SG Alftal
         </h1>
         <Button
@@ -135,19 +133,19 @@ function User() {
         }}
       >
         <Table
+          style={{}}
           bordered={true}
-          scroll={{ y:9999999 }} // Set the height of the table to 400px
+          scroll={{ y: 9999999 }} // Set the height of the table to 400px
           columns={columns}
           dataSource={tableData}
           pagination={{
             pageSize: 999,
-            position: []
+            position: [],
           }}
-          
         />
       </div>
     </>
   );
 }
 
-export default User;
+export default Spieler;

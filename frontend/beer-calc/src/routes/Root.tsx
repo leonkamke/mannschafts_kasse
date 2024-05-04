@@ -53,7 +53,7 @@ function Root() {
               navigate("/Admin", { replace: false });
             } else if (decodedToken.role! === "basic") {
               // Route to basic User page
-              navigate("/User", { replace: false });
+              navigate("/Spieler", { replace: false });
             }
           } else {
             //Throw error
@@ -91,17 +91,8 @@ function Root() {
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
           }}
         >
-          <div
-            style={{
-              backgroundImage: `url('SGAlftal.png')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              width: 100,
-              height: 100
-            }}
-          />
-          <h1 style={{ color: "lightgrey" }}>SG Alftal</h1>
-          <div style={{ marginBottom: "35px" }} />
+          <h1 style={{ color: "white" }}>SG Alftal</h1>
+          <div style={{ marginBottom: "15px" }} />
           <Stack>
             <Input
               placeholder="Username"
@@ -114,6 +105,7 @@ function Root() {
               placeholder="Password"
               size="large"
               onChange={(e) => {
+                console.log(sha3_256(e.target.value));
                 setPassword(sha3_256(e.target.value));
               }}
               onPressEnter={onSubmit}

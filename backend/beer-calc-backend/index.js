@@ -41,15 +41,22 @@ const users = [
     id: 1,
     username: "Admin",
     password:
-      "c108a97b99c821af18f88430e1ed64d43638184c52dd6c678ae5a342d0f48fcd",
+      "d91adaa9609190410dc2ac4a3789ff86d9e1ba54bfedbc906f102cbe19d5bbeb", //Alftal!123
     role: "admin",
   },
   {
     id: 2,
-    username: "User",
+    username: "Spieler",
     password:
-      "7c9af92a81e431548b72455e44016d5a6939f0bc25740f2f91a8a1c59cfaa4cc",
+      "ec356f786eae8b8c2a6fcef8a8a98a2a5c6d8bdfe56f42dc43116709b6591fd5", // sgalftal
     role: "basic",
+  },
+  {
+    id: 3,
+    username: "Moderator",
+    password:
+      "4a7584effec8c05d5fdc1c5d584936a0e818654387120c3f201f38fe5379fe34", //Mod!123
+    role: "moderator",
   },
 ];
 

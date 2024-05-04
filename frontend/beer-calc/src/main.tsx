@@ -4,7 +4,7 @@ import "./index.css";
 import AuthProvider from "react-auth-kit";
 import Root from "./routes/Root.tsx";
 import Admin from "./routes/Admin.tsx";
-import User from "./routes/User.tsx";
+import Spieler from "./routes/Spieler.tsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthOutlet from "@auth-kit/react-router/AuthOutlet";
 import createStore from 'react-auth-kit/createStore';
@@ -49,7 +49,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path={"/"} element={<Root />} />
             <Route element={<AuthOutlet fallbackPath="/" />}>
               <Route path="/Admin" element={<Admin />} />
-              <Route path="/User" element={<User />} />
+              <Route path="/Spieler" element={<Spieler />} />
             </Route>
           </Routes>
         </BrowserRouter>
