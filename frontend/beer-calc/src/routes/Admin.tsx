@@ -345,7 +345,7 @@ function Admin() {
           okText="Ja"
           cancelText="Nein"
         >
-          Sicher, dass der Spieler gelöscht werden soll?
+          Sicher, dass {selectedRows && selectedRows.length == 1 ? selectedRows[0].vorname + " " + selectedRows[0].nachname : "der Spieler"} gelöscht werden soll?
         </Modal>
 
       </div>
@@ -359,7 +359,7 @@ function Admin() {
           bordered={true}
           style={{ width: "100%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)", }}
         >
-          <h2>{"Edit Row"}</h2>
+          <h2>{"Editor"}</h2>
           <Divider orientation="left" style={{ borderColor: "grey" }}>
             Bier
           </Divider>
