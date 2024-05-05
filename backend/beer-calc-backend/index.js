@@ -185,57 +185,66 @@ app.post("/api/anwenden_mod", verifyModerator, (req, res) => {
   const vornameArray = req.body.vornamen;
   const nachnameArray = req.body.nachnamen;
 
-  if (updatedRows.bier < 0 || updatedRows.sonstige_kosten < 0 || updatedRows.softdrinks < 0) {
-    console.error("Error Moderator: Negative Zahlen benutzt");
-    return;
-  }
-
-  db.serialize(() => {
-    db.run(`UPDATE Spieler
-    SET bier = bier + ${updatedRows.bier},
-        softdrinks = softdrinks + ${updatedRows.softdrinks},
-        sonstige_kosten = ROUND(sonstige_kosten + ${updatedRows.sonstige_kosten}, 2)
-    WHERE key IN (${updatedRows.keys})`);
-
-    // Execute the second statement after the first one completes
-    db.run(
-      "UPDATE Spieler SET gesamtkosten = (bier * 1.5) + softdrinks + sonstige_kosten + monatsbeitrag"
-    );
-
-    for (
-      let i = 0;
-      i < Math.min(vornameArray.length, nachnameArray.length);
-      i++
-    ) {
-      const data = {
-        $vorname: vornameArray[i],
-        $nachname: nachnameArray[i],
-        $bier: updatedRows.bier,
-        $softdrinks: updatedRows.softdrinks,
-        $sonstige_kosten: Math.round(updatedRows.sonstige_kosten * 100) / 100,
-        $type: "Bearbeitet",
-      };
-      // Execute the insert query
-      const insertQuery = `INSERT INTO Historie (vorname, nachname, bier, softdrinks, sonstige_kosten, type)
-                           VALUES ($vorname, $nachname, $bier, $softdrinks, $sonstige_kosten, $type)
-                            `;
-      db.run(insertQuery, data, function (err) {
+  if (updatedRows.bier >= 0 && updatedRows.sonstige_kosten >= 0 && updatedRows.softdrinks >= 0) {
+    db.serialize(() => {
+      db.run(`UPDATE Spieler
+      SET bier = bier + ${updatedRows.bier},
+          softdrinks = softdrinks + ${updatedRows.softdrinks},
+          sonstige_kosten = ROUND(sonstige_kosten + ${updatedRows.sonstige_kosten}, 2)
+      WHERE key IN (${updatedRows.keys})`);
+  
+      // Execute the second statement after the first one completes
+      db.run(
+        "UPDATE Spieler SET gesamtkosten = (bier * 1.5) + softdrinks + sonstige_kosten + monatsbeitrag"
+      );
+  
+      for (
+        let i = 0;
+        i < Math.min(vornameArray.length, nachnameArray.length);
+        i++
+      ) {
+        const data = {
+          $vorname: vornameArray[i],
+          $nachname: nachnameArray[i],
+          $bier: updatedRows.bier,
+          $softdrinks: updatedRows.softdrinks,
+          $sonstige_kosten: Math.round(updatedRows.sonstige_kosten * 100) / 100,
+          $type: "Bearbeitet",
+        };
+        // Execute the insert query
+        const insertQuery = `INSERT INTO Historie (vorname, nachname, bier, softdrinks, sonstige_kosten, type)
+                             VALUES ($vorname, $nachname, $bier, $softdrinks, $sonstige_kosten, $type)
+                              `;
+        db.run(insertQuery, data, function (err) {
+          if (err) {
+            console.error("Error inserting row:", err.message);
+          } else {
+          }
+        });
+      }
+  
+      // Execute the third statement after the second one completes
+      db.all("SELECT * FROM Spieler ORDER BY nachname", (err, rows) => {
         if (err) {
-          console.error("Error inserting row:", err.message);
+          console.error("Error:", err.message);
         } else {
+          res.json(rows);
         }
       });
-    }
-
-    // Execute the third statement after the second one completes
-    db.all("SELECT * FROM Spieler ORDER BY nachname", (err, rows) => {
-      if (err) {
-        console.error("Error:", err.message);
-      } else {
-        res.json(rows);
-      }
     });
-  });
+  } else {
+    console.error("Error Moderator: Negative Zahlen benutzt");
+    db.serialize(() => {
+      // Execute the third statement after the second one completes
+      db.all("SELECT * FROM Spieler ORDER BY nachname", (err, rows) => {
+        if (err) {
+          console.error("Error:", err.message);
+        } else {
+          res.json(rows);
+        }
+      });
+    });
+  }
 });
 
 app.post("/api/spielerloeschen", verifyAdmin, (req, res) => {
